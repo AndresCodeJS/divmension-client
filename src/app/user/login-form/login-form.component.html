@@ -1,0 +1,63 @@
+<div
+  class="fixed flex flex-row justify-center items-center rounded-3xl modal-login"
+>
+  <div
+    class="flex flex-col items-center bg-white w-full h-full rounded-2xl px-10 md:px-16 lg:px-10 py-8 lg:py-14"
+  >
+    <div class="flex w-full justify-center mb-1 sm:mb-5">
+      <p class="font-bold text-3xl">Log In</p>
+    </div>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="flex flex-col w-3/4 items-center rounded-lg justify-between h-full gap-3"
+    >
+      <!-- INPUTS ------------------------------------------->
+
+      <div class="flex flex-col w-full pt-5">
+        <!-- USERNAME -->
+        <div class="relative flex flex-col w-full mb-3">
+          <label class="form-label">USERNAME</label>
+
+          <input
+            type="text"
+            formControlName="username"
+            placeholder="Username"
+            class="form-input py-4"
+            (keydown)="onKeyDown()"
+          />
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="relative flex flex-col w-full">
+          <label class="form-label">PASSWORD</label>
+          <input
+            type="password"
+            formControlName="password"
+            placeholder="Passowrd"
+            class="form-input"
+            (keydown)="onKeyDown()"
+          />
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="form.invalid"
+        class="true"
+        class="button-full py-2 w-full {{
+          form.invalid ? 'hover:bg-black' : ''
+        }}"
+      >
+        Login
+      </button>
+      <div class="text-xs sm:text-sm sm:flex gap-2 mt-2 text-gray-heavy" >
+        <p>Not a member yet?</p>
+        <button (click)="openSignUpForm()" class="border-b border-gray-medium hover:border-gray-dark">
+          <p class="font-semibold">Register now</p>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

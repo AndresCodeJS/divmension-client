@@ -1,0 +1,143 @@
+<div
+  class="fixed flex flex-row h-28 w-full rounded-md items-center justify-between"
+>
+  <!-- container to close DROPDPWN or SEARCHBAR -->
+
+  <!--  LOGO -->
+  <div class="sm:ml-5 mt-3 ml-3">
+    <img src="/divmension_logo.png" alt="Logo" class="w-28 sm:w-40 h-auto" />
+  </div>
+
+  <!-- <div class="fixed h-dvh w-dvw -z-10 bg-yellow"></div> -->
+
+  <!--  SEARCH BAR -->
+  <div class="w-3/4 mx-3 mt-3">
+    <form class="max-w-md mx-auto">
+      <div class="relative">
+        <div
+          class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+        >
+          <svg
+            class="w-4 h-4 text-gray-heavy dark:text-gray-400"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+            />
+          </svg>
+        </div>
+        <input
+          type="text"
+          id="default-search"
+          class="transition ease-in-out duration-300 block w-full min-w-40 h-9 sm:h-10 p-3 ps-10 shadow-sm text-sm sm:text-md text-gray-heavy outline-none border-gray-medium rounded-lg searchbar-input placeholder-gray-heavy ring-gray-light focus:placeholder-gray-medium bg-gray-medium focus:ring-gray-light focus:border-gray-light focus:bg-white dark:bg-gray-light dark:border-gray-medium dark:placeholder-gray-medium dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Search friends ..."
+          (keydown)="onSearchList($event)"
+          (input)="onSearchInput()"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="searchTerm"
+          required
+        />
+
+        <!-- Lista de coincidencias de la barra de busqueda -->
+        <!-- @if(userList[0].username){ -->
+
+        <app-search-bar-drop-down
+          [closeSearchList]="closeSearchList"
+          [notFound]="notFound"
+          [userList]="userList"
+          (closeSearchBarEmitter)="onClickSearchList()"
+        />
+        <!-- } -->
+      </div>
+    </form>
+  </div>
+
+  <!-- OPTIONS -->
+
+  <div class="flex justify-end gap-4 mr-2 md:mr-10 w-1/12 lg:w-2/12">
+    @if(!store.isLoading()){ @if(!store.user().username){
+    <div class="hidden lg:flex gap-4">
+      <button
+        (click)="openLoginForm()"
+        class="font-bold text-black hidden sm:block hover:text-gray-heavy"
+      >
+        Log In
+      </button>
+      <button
+        (click)="openSignForm()"
+        class="font-bold text-black hidden sm:block hover:text-gray-heavy"
+      >
+        Sign Up
+      </button>
+    </div>
+
+    <app-drop-down-menu
+      class="lg:hidden"
+      (onClickMenuEmitter)="onClickMenu($event)"
+    />
+
+    }@else {
+    <app-drop-down-menu (onClickMenuEmitter)="onClickMenu($event)" />
+
+    } }
+  </div>
+
+  <!-- Menu con opciones -->
+  <!-- <app-drop-down-menu
+    class="lg:hidden"
+    (onClickMenuEmitter)="onClickMenu($event)"
+  /> -->
+</div>
+
+<!-- FORMULARIO DE REGISTRO -->
+<div
+  class="fixed bg-black h-dvh w-full transition ease-in-out duration-500 {{
+    closeSignForm ? 'opacity-0 invisible' : 'opacity-50 visible'
+  }}"
+></div>
+
+<app-register-form
+  (closeSignUpFormEventEmitter)="onClickOut()"
+  (openLoginFormEventEmitter)="openLoginForm()"
+  [closeSignForm]="closeSignForm"
+  class="transition ease-in-out duration-1000 {{
+    closeSignForm ? 'opacity-0 invisible' : 'opacity-100 visible'
+  }}"
+/>
+
+<!-- FORMULARIO DE LOGIN -->
+<div
+  class="fixed bg-black h-dvh w-full transition ease-in-out duration-500 {{
+    closeLoginForm ? 'opacity-0 invisible' : 'opacity-50 visible'
+  }}"
+></div>
+
+<app-login-form
+  (closeFormEventEmitter)="onClickOutLoginForm()"
+  (openSignUpFormEventEmitter)="openSignForm()"
+  [closeLoginForm]="closeLoginForm"
+  class="transition ease-in-out duration-1000 {{
+    closeLoginForm ? 'opacity-0 invisible' : 'opacity-100 visible'
+  }}"
+/>
+
+<!-- <div
+  class="fixed bg-black h-dvh w-full transition ease-in-out duration-500 opacity-75 "
+></div>
+
+<app-register-form
+  (closeFormEventEmitter)="onClickOut()"
+  [closeSignForm]="closeSignForm"
+  class="transition ease-in-out duration-1000"
+/> -->
+
+<!-- <div  class="fixed flex bg-black w-1/2 h-1/2  translate-x-10 transition ease-in-out duration-1000 {{closeSignForm?'opacity-0':'opacity-50'}}">
+
+</div> -->
