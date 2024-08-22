@@ -120,6 +120,8 @@ export class HeaderComponent {
 
   notFound = false
 
+  isLoading = false
+
   private usersService = inject(UsersService);
 
   userList: IUserList[] = [
@@ -165,6 +167,8 @@ export class HeaderComponent {
 
         if(!regex.test(fixedString)){ //si el texto no contiene simbolos, excepto el punto
 
+          this.isLoading = true
+
           this.usersService.getUserList(fixedString).subscribe({
             next: (response) => {
               console.log('responde' + JSON.stringify(response.users));
@@ -173,9 +177,11 @@ export class HeaderComponent {
               }else{
                 this.notFound = true
               }
+              this.isLoading = false
             },
             error: (error) => {
               this.notFound = true
+              this.isLoading = false
             },
           });
         }else{

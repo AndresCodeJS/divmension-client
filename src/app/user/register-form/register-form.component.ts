@@ -162,8 +162,13 @@ export default class RegisterFormComponent {
   //Inyeccion del store
   store = inject(Store)
 
+  isLoading = false
+
   onSubmit() {
     if (!this.form.invalid) {
+
+      this.isLoading = true
+
       //Peticion HTTP POST para crear el usuario
       this.usersService.setSignUpUser(this.form.getRawValue()).subscribe({
         next: (response: any) => {
@@ -180,6 +185,8 @@ export default class RegisterFormComponent {
           this.store.setUser(response.user)
 
           this.closeSignUpFormEventEmitter.emit(true);
+
+          this.isLoading = false
         },
         error: (error: HttpErrorResponse) => {
           if (error.error.type == 'USER_EXISTS') {
@@ -191,6 +198,8 @@ export default class RegisterFormComponent {
             console.log(error.error.message);
             this.errors.email = true;
           }
+
+          this.isLoading = false
 
           console.log(error.error.message);
         },

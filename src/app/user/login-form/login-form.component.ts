@@ -108,11 +108,18 @@ export class LoginFormComponent {
   //Inyeccion del store
   store = inject(Store)
 
+  isLoading = false
+
   onSubmit() {
     if (!this.form.invalid) {
+
+      this.isLoading = true
+
       this.usersService.setLoginUser(this.form.getRawValue()).subscribe({
         next:(response)=>{
           this.form.reset()
+
+          this.isLoading = false
           
           console.log(response);
 
@@ -133,6 +140,8 @@ export class LoginFormComponent {
             console.log(error.error.message);
             this.errors.password = true;
           }
+
+          this.isLoading = false
         },
       })
     }
