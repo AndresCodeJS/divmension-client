@@ -9,7 +9,7 @@
     @for( user of userList; track user.username){ @if(user.username){
 
     <li>
-      <button (click)="onClickSearchResult()">{{ user.username }}</button>
+      <button [routerLink]="['/user/profile', user.username]" (click)="onClickSearchResult(user.username)">{{ user.username }}</button>
     </li>
     } }
     <!-- <li><button (click)="onClickSearchResult()">Opcion1</button></li> -->

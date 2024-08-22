@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -8,16 +9,28 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './profile.component.html',
   styles: ``
 })
-export default class ProfileComponent {
+export default class ProfileComponent implements OnInit {
 
-  id: string
+  private subscription: Subscription | undefined;
+
+  username: string | null
 
   /* private route = inject(ActivatedRoute) */
 
   constructor(private route: ActivatedRoute){
-    this.id = this.route.snapshot.paramMap.get('username') || ''
+    this.username = this.route.snapshot.paramMap.get('username') || ''
   }
 
+ 
+  ngOnInit(): void {
+    this.subscription = this.route.paramMap.subscribe(params => {
+      const usernameParam = params.get('username');
+      // Realiza las acciones necesarias con el nuevo id
+     /*  console.log('Nuevo ID:', username); */
+      this.username = usernameParam
+    });
+
+  }
 
 
 

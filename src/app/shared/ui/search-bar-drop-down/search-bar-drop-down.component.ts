@@ -1,16 +1,17 @@
 import { Component, ElementRef, EventEmitter, Input, Output, Renderer2 } from '@angular/core';
 import { IUserList } from '../../interfaces/user.interface';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-search-bar-drop-down',
   standalone: true,
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './search-bar-drop-down.component.html',
   styles: ``
 })
 export class SearchBarDropDownComponent {
 
-  constructor(private renderer: Renderer2, private el: ElementRef) {
+  constructor(private renderer: Renderer2, private el: ElementRef, private router: Router) {
     // Listener global para clics fuera del componente
     this.renderer.listen('document', 'click', (event: Event) => {
       this.onDocumentClick(event);
@@ -31,9 +32,10 @@ export class SearchBarDropDownComponent {
     photoUrl: ''
   }]
 
-  onClickSearchResult(){
+  onClickSearchResult(username: string){
     console.log('se selecciono una opcion')
     this.closeSearchBarEmitter.emit(false)
+   /*  this.router.navigate([`/user/profile/${username}`]); */
   }
 
   onDocumentClick(event: Event) {
