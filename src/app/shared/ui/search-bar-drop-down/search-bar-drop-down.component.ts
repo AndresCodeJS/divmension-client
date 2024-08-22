@@ -32,9 +32,9 @@ export class SearchBarDropDownComponent {
     photoUrl: ''
   }]
 
-  onClickSearchResult(username: string){
+  onClickSearchResult(){
     console.log('se selecciono una opcion')
-    this.closeSearchBarEmitter.emit(false)
+    this.closeSearchBarEmitter.emit(true)
    /*  this.router.navigate([`/user/profile/${username}`]); */
   }
 

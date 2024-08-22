@@ -108,7 +108,10 @@ export class HeaderComponent {
 
   //Se usa para cerrar la lista de resultados de la barra de busqueda
   //Se activa cuando se da click fuera del la lista (por medio de un evento enviado desde el componente de la lista)
-  onClickSearchList() {
+  onClickSearchList(clickIn:boolean) {
+    if(clickIn){
+      this.searchTerm = ''
+    }
     this.closeSearchList = true;
     this.notFound = false
   }

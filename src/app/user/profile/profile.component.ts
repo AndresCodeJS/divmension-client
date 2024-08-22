@@ -21,7 +21,8 @@ export default class ProfileComponent implements OnInit {
     this.username = this.route.snapshot.paramMap.get('username') || ''
   }
 
- 
+  isLoading = false
+
   ngOnInit(): void {
     this.subscription = this.route.paramMap.subscribe(params => {
       const usernameParam = params.get('username');

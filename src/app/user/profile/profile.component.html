@@ -1,36 +1,41 @@
 
 <!-- <p>el parametro es {{id}}</p> -->
 
-<div class="flex  flex-col items-center w-full bg-yellow px-4 py-10 sm:p-16  h-dvh   overflow-y-auto">
-    <!-- USUARIO -->
-    <div class="flex bg-orange w-full sm:w-8/12 md:w-10/12 lg:w-6/12 h-min ">
-        <!-- Imagen de perfil -->
-        <div class="flex justify-center md:items-center w-5/12 h-36 md:h-60 bg-black">
-            <img [src]="'/sin-perfil.jpg'" alt="Logo" class=" h-24 sm:h-36 md:h-48 rounded-full " />
-        </div>
-        <!-- Datos del usuario -->
-        <div class="flex flex-col w-7/12 h-36 md:h-60  md:pt-8 pl-4 gap-6 bg-gray-medium">
-            <div class="flex flex-col w-full bg-yellow">
-                <p class="font-bold text-gray-heavy text-xl md:text-4xl">{{username}}</p>
-                <p class="font-bold text-gray-heavy text-sm md:text-lg">Andres Gomez</p>
+<div class="flex  flex-col items-center w-full px-4 py-10 sm:p-16  h-dvh overflow-y-auto">
+    <!-- @if(isLoading){ -->
+
+        <!-- USUARIO -->
+        <div class="flex bg-orange w-full sm:w-8/12 md:w-10/12 lg:w-6/12 h-min ">
+            <!-- Imagen de perfil -->
+            <div class="flex justify-center md:items-center w-5/12 h-36 md:h-60 bg-black">
+                <img [src]="'/sin-perfil.jpg'" alt="Logo" class=" h-24 sm:h-36 md:h-48 rounded-full " />
             </div>
-            <div class="flex flex-row w-full bg-yellow gap-2">
-                
-                <!-- Cantidades -->
-                <div class="flex flex-col items-start font-extrabold text-gray-heavy text-xs sm:text-base">
-                    <p  class="font-extrabold">{{1}}</p>
-                    <p  class="font-extrabold">{{3}}</p>
-                    <p  class="font-extrabold">{{2}}</p>
+            <!-- Datos del usuario -->
+            <div class="flex flex-col w-7/12 h-36 md:h-60  md:pt-8 pl-4 gap-6 bg-gray-medium">
+                <div class="flex flex-col w-full bg-yellow">
+                    <p class="font-bold text-gray-heavy text-xl md:mb-2 md:text-4xl">{{username}}</p>
+                    <p class="font-bold text-gray-heavy text-sm md:text-lg">Andres Gomez</p>
                 </div>
-                <!-- Descripciones -->
-                <div class="font-bold text-gray-heavy text-xs sm:text-base">
-                    <p >Posts</p>
-                    <p >Followers</p>
-                    <p >Following</p>
+                <div class="flex flex-row w-full bg-yellow gap-2">
+                    
+                    <!-- Cantidades -->
+                    <div class="flex flex-col items-start font-extrabold text-gray-heavy text-xs sm:text-base">
+                        <p  class="font-extrabold">{{1}}</p>
+                        <p  class="font-extrabold">{{3}}</p>
+                        <p  class="font-extrabold">{{2}}</p>
+                    </div>
+                    <!-- Descripciones -->
+                    <div class="font-bold text-gray-heavy text-xs sm:text-base">
+                        <p >Posts</p>
+                        <p >Followers</p>
+                        <p >Following</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+   <!--  } -->
+    
+
 
     <!-- POSTS -->
     <div class="flex flex-col w-full sm:w-10/12 bg-orange  mt-10 mb-20" >
