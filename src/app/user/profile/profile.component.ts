@@ -1,34 +1,56 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { UsersService } from '../data-access/users.service';
+import { IUserList } from '../../shared/interfaces/user.interface';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [],
   templateUrl: './profile.component.html',
-  styles: ``
+  styles: ``,
+  providers: [UsersService]
 })
 export default class ProfileComponent implements OnInit {
 
   private subscription: Subscription | undefined;
 
-  username: string | null
-
-  /* private route = inject(ActivatedRoute) */
+  user: IUserList = {
+    username: '',
+    fullname: '',
+    photoUrl: ''
+  }
 
   constructor(private route: ActivatedRoute){
-    this.username = this.route.snapshot.paramMap.get('username') || ''
   }
 
   isLoading = false
 
+  userNotFound = false
+
+  private usersService = inject(UsersService);
+
   ngOnInit(): void {
     this.subscription = this.route.paramMap.subscribe(params => {
-      const usernameParam = params.get('username');
-      // Realiza las acciones necesarias con el nuevo id
-     /*  console.log('Nuevo ID:', username); */
-      this.username = usernameParam
+      const usernameParam = params.get('username') || '';
+
+      this.isLoading = true
+
+      //Peticion HTTP GET para obtener el perfil del usuario
+      this.usersService.getUserProfile(usernameParam).subscribe({
+        next: (response: any) => {
+          this.user = response.user
+          console.log('el usuario obtenido es:'+this.user.fullname)
+
+          this.isLoading = false
+        },
+        error: (error: HttpErrorResponse) => {
+          this.userNotFound = true
+          this.isLoading = false
+        },
+      });
     });
 
   }

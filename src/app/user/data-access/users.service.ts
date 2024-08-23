@@ -29,4 +29,8 @@ export class UsersService extends BaseHttpService {
   getUserList(user: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/users/search/${user}`);
   }
+
+  getUserProfile(username: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/users/profile/${username}`);
+  }
 }

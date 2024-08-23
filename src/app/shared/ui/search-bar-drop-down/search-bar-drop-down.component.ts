@@ -32,12 +32,13 @@ export class SearchBarDropDownComponent {
     photoUrl: ''
   }]
 
+  //Se ejecuta cuando se selecciona una opcion
   onClickSearchResult(){
     console.log('se selecciono una opcion')
     this.closeSearchBarEmitter.emit(true)
-   /*  this.router.navigate([`/user/profile/${username}`]); */
   }
 
+  //Se ejecuta cuando se hace click fuera de este componente
   onDocumentClick(event: Event) {
     const clickedInside = this.el.nativeElement.contains(event.target);
     if (!clickedInside) {
