@@ -7,20 +7,41 @@
   <!-- @if(isLoading){ -->
 
   <!-- USUARIO -->
-  <div class="flex bg-orange w-full sm:w-8/12 md:w-10/12 lg:w-6/12 h-min">
+  <div class="flex  bg-orange w-full sm:w-8/12 md:w-10/12 lg:w-6/12 h-min">
     <!-- Imagen de perfil -->
     <div
-      class="flex justify-center md:items-center w-5/12 h-36 md:h-60 bg-black"
+      class="flex flex-col sm:justify-center items-center w-5/12 h-36 md:h-56 "
     >
-      <img
-        [src]="user.photoUrl || '/sin-perfil.jpg'"
-        alt="Logo"
-        class="h-24 sm:h-36 md:h-48 rounded-full"
-      />
+    <div class="flex h-3/4 justify-center bg-yellow">
+
+        <img
+          [src]="user.photoUrl || '/sin-perfil.jpg'"
+          alt="Logo"
+          class="flex h-full sm:h-full md:h-full rounded-full"
+        />
+    </div>
+    
+    @if(store.user().username && store.user().username != user.username ){
+      @if(isFollowing){
+        <div (click)="unfollowUser()" class="flex h-1/4 bg-gray-light justify-center items-center p-2">
+          <button  class="text-xs md:text-sm  button-light py-0.5 px-2 md:py-1 md:px-4">
+            Unfollow
+          </button>
+      </div>
+      }@else {
+
+        <div class="flex h-1/4 bg-gray-light justify-center items-center p-2">
+            <button (click)="followUser()" class="text-xs md:text-sm  button-light py-0.5 px-2 md:py-1 md:px-4">
+              Follow
+            </button>
+        </div>
+      }
+    }
+    
     </div>
     <!-- Datos del usuario -->
     <div
-      class="flex flex-col w-7/12 h-36 md:h-60 md:pt-8 pl-4 gap-6 bg-gray-medium"
+      class="flex flex-col w-7/12 h-36 md:h-56 md:pt-4 pl-4 gap-6 bg-gray-medium"
     >
       <div class="flex flex-col w-full bg-yellow">
         <p class="font-bold text-gray-heavy text-xl md:mb-2 md:text-3xl">
@@ -35,9 +56,9 @@
         <div
           class="flex flex-col items-start font-extrabold text-gray-heavy text-xs sm:text-base"
         >
-          <p class="font-extrabold">{{ 1 }}</p>
-          <p class="font-extrabold">{{ 3 }}</p>
-          <p class="font-extrabold">{{ 2 }}</p>
+          <p class="font-extrabold">{{ user.posts || '0' }}</p>
+          <p class="font-extrabold">{{ user.followers || '0' }}</p>
+          <p class="font-extrabold">{{ user.following || '0'}}</p>
         </div>
         <!-- Descripciones -->
         <div class="font-bold text-gray-heavy text-xs sm:text-base">

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseHttpService } from '../../shared/data-access/base-http.service';
-import { ICredentials, IUser } from '../../shared/interfaces/user.interface';
+import { ICredentials, IUser, IUserList } from '../../shared/interfaces/user.interface';
 import { Observable } from 'rxjs';
 import { HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { getToken } from './local-storage';
@@ -31,6 +31,39 @@ export class UsersService extends BaseHttpService {
   }
 
   getUserProfile(username: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/users/profile/${username}`);
+
+    let authToken = getToken();
+
+    const headers = new HttpHeaders({
+      Authorization: authToken || '',
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get<any>(`${this.apiUrl}/users/profile/${username}`,{headers});
+  }
+
+  followUser(followingUser: string){
+
+    let authToken = getToken();
+
+    const headers = new HttpHeaders({
+      Authorization: authToken!,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post<any>(`${this.apiUrl}/users/follow`,{followingUser},{headers});
+  }
+
+  
+  unfollowUser(unfollowUser: string){
+
+    let authToken = getToken();
+
+    const headers = new HttpHeaders({
+      Authorization: authToken!,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post<any>(`${this.apiUrl}/users/unfollow`,{unfollowUser},{headers});
   }
 }

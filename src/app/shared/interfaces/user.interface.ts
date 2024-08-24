@@ -6,7 +6,7 @@ export interface IUser {
   repassword: string;
 }
 
-export interface ICredentials{
+export interface ICredentials {
   username: string;
   password: string;
 }
@@ -15,11 +15,20 @@ export interface IUserStore {
   username: string;
   email: string;
   fullname: string;
-  photoUrl: string
+  photoUrl: string;
 }
 
-export interface IUserList{
+export interface IUserList {
   username: string;
   fullname: string;
-  photoUrl: string
+  photoUrl: string;
+}
+
+export interface IUserProfile {
+  username: string;
+  fullname: string;
+  photoUrl: string;
+  followers: number;
+  following: number;
+  posts: number;
 }
