@@ -68,7 +68,7 @@ export const Store = signalStore(
 
         http
           .get<IUserStore>(
-            'https://edpeimqbi3.execute-api.us-east-1.amazonaws.com/prod/users/refresh-page',
+            'https://wawp912c89.execute-api.us-east-1.amazonaws.com/prod/users/refresh-page',
             { headers }
           )
           .subscribe({

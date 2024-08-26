@@ -9,6 +9,7 @@ import {
 } from '../../shared/interfaces/user.interface';
 import { Store } from '../../store/store';
 import { S3UploaderService } from '../../shared/data-access/s3.service';
+import { constants } from '../../global';
 
 @Component({
   selector: 'app-profile',
@@ -32,7 +33,10 @@ export default class ProfileComponent implements OnInit {
     posts: 0,
   };
 
-  constructor(private route: ActivatedRoute, private s3Uploader: S3UploaderService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private s3Uploader: S3UploaderService
+  ) {}
 
   isLoading = false;
   userNotFound = false;
@@ -76,22 +80,29 @@ export default class ProfileComponent implements OnInit {
   onFileSelected(event: any) {
     if (event.target) {
       if (event.target.files.length) {
-        this.selectedFile = event.target.files[0] as File;
-        console.log('se cargo un archivo')
+        if (event.target.files[0].type.match(/image\/*/)) {
+          // solo imagenes
+          this.selectedFile = event.target.files[0] as File;
+          console.log('se cargo un archivo');
+        } else {
+          this.selectedFile = null;
+        }
       }
     }
   }
 
-  uploadFile() {
+  profile = constants.PROFILE;
+
+  async uploadFile() {
     if (this.selectedFile) {
-      this.s3Uploader.uploadFile(this.selectedFile)
-        .then(url => {
+      await this.s3Uploader.uploadFile(this.selectedFile, this.profile);
+      /*   .then(url => {
           console.log('Archivo subido exitosamente:', url);
           // Aquí puedes guardar la URL en tu base de datos o hacer lo que necesites
         })
         .catch(err => {
           console.error('Error al subir el archivo:', err);
-        });
+        }); */
     }
   }
 
