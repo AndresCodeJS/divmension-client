@@ -5,7 +5,9 @@ import { Observable } from 'rxjs';
 import { HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { getToken } from './local-storage';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class UsersService extends BaseHttpService {
   setSignUpUser(user: IUser): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/users/create`, user);
@@ -19,7 +21,7 @@ export class UsersService extends BaseHttpService {
     let authToken = getToken();
 
     const headers = new HttpHeaders({
-      Authorization: authToken!,
+      Authorization: authToken || '',
       'Content-Type': 'application/json',
     });
 
@@ -47,7 +49,7 @@ export class UsersService extends BaseHttpService {
     let authToken = getToken();
 
     const headers = new HttpHeaders({
-      Authorization: authToken!,
+      Authorization: authToken || '',
       'Content-Type': 'application/json',
     });
 
@@ -60,10 +62,21 @@ export class UsersService extends BaseHttpService {
     let authToken = getToken();
 
     const headers = new HttpHeaders({
-      Authorization: authToken!,
+      Authorization: authToken || '',
       'Content-Type': 'application/json',
     });
 
     return this.http.post<any>(`${this.apiUrl}/users/unfollow`,{unfollowUser},{headers});
+  }
+
+  getS3Credentials(){
+    let authToken = getToken();
+
+    const headers = new HttpHeaders({
+      Authorization: authToken || '',
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get<any>(`${this.apiUrl}/users/s3-credentials`,{headers});
   }
 }
