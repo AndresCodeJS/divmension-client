@@ -39,6 +39,7 @@ export default class ProfileComponent implements OnInit {
   ) {}
 
   isLoading = false;
+  isLoadingPhoto = false;
   userNotFound = false;
 
   private usersService = inject(UsersService);
@@ -77,13 +78,14 @@ export default class ProfileComponent implements OnInit {
 
   selectedFile: File | null = null;
 
-  onFileSelected(event: any) {
+  async onFileSelected(event: any) {
     if (event.target) {
       if (event.target.files.length) {
         if (event.target.files[0].type.match(/image\/*/)) {
           // solo imagenes
-          this.selectedFile = event.target.files[0] as File;
+          let selectedFile = event.target.files[0] as File;
           console.log('se cargo un archivo');
+          await this.uploadFile(selectedFile);
         } else {
           this.selectedFile = null;
         }
@@ -91,21 +93,54 @@ export default class ProfileComponent implements OnInit {
     }
   }
 
-  profile = constants.PROFILE;
-
-  async uploadFile() {
-    if (this.selectedFile) {
-      await this.s3Uploader.uploadFile(this.selectedFile, this.profile);
-      /*   .then(url => {
-          console.log('Archivo subido exitosamente:', url);
-          // Aquí puedes guardar la URL en tu base de datos o hacer lo que necesites
-        })
-        .catch(err => {
-          console.error('Error al subir el archivo:', err);
-        }); */
-    }
+  triggerFileInput() {
+    // Obtiene una referencia al input de archivo
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    // Simula un clic en el input de archivo
+    fileInput.click();
   }
 
+  profile = constants.PROFILE;
+
+  photoUrl: string | ArrayBuffer | null = '/sin-perfil.jpg'
+
+  async uploadFile(selectedFile: File) {
+    if (selectedFile) {
+      this.isLoadingPhoto = true;
+      this.s3Uploader
+        .uploadFile(selectedFile, this.profile)
+        .then((url) => {
+          console.log('se cargo la foto');
+          /* this.photoUrl = url */
+          console.log(url);
+          this.isLoadingPhoto = false;
+
+          // Almacena la imagen en photoUrl para mostrarla localmente pues como no se ha recargado la pagina ...
+          // no se muestra la url almacenada en los datos del usuario
+          const reader = new FileReader();
+
+          reader.onload = (e: ProgressEvent<FileReader>) => {
+            this.photoUrl = e.target?.result || '/sin-perfil.jpg'
+          };
+
+          reader.readAsDataURL(selectedFile)
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoadingPhoto = false;
+        });
+
+      /*    if(response?.photoUrl){
+        console.log('se cargo la foto')
+        console.log(response.photoUrl)
+      }
+      
+      this.isLoadingPhoto = false */
+    } else {
+      console.log('no hay archivo');
+    }
+  }
+  // Cargar los datos al acceder al perfil del usuario -------------------------------------------------
   ngOnInit(): void {
     this.subscription = this.route.paramMap.subscribe((params) => {
       const usernameParam = params.get('username') || '';
