@@ -161,8 +161,6 @@ export class HeaderComponent {
 
       console.log(`Realizando busqueda por ${fixedString}`);
 
-     
-
       //cierra la lista cuando se borra y no queda nada escrito
       if (!fixedString) {
         this.closeSearchList = true;
@@ -177,6 +175,7 @@ export class HeaderComponent {
               console.log('responde' + JSON.stringify(response.users));
               if (response.users.length) {
                 this.userList = response.users;
+                console.log(response.users)
               }else{
                 this.notFound = true
               }

@@ -8,7 +8,7 @@ import {
   IUserProfile,
 } from '../../shared/interfaces/user.interface';
 import { Store } from '../../store/store';
-import { S3UploaderService } from '../../shared/data-access/s3.service';
+import { S3UploaderService, ImageResizeService } from '../../shared/data-access/s3.service';
 import { constants } from '../../global';
 
 @Component({
@@ -36,7 +36,7 @@ export default class ProfileComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private s3Uploader: S3UploaderService,
-    private router: Router
+    private imageResizer: ImageResizeService
   ) {}
 
   isLoading = false;
@@ -107,32 +107,40 @@ export default class ProfileComponent implements OnInit {
 
   async uploadFile(selectedFile: File) {
     if (selectedFile) {
+
+      //Se modifican las dimensiones de la imagen
+      const resizedFile = await this.imageResizer.resizeImage(selectedFile,400,400) as File
+
+      console.log('Normal Image')
+      console.log(selectedFile.size)
+
+      console.log('Image resized')
+      console.log(resizedFile.size)
+
       this.user.photoUrl = '';
       this.isLoadingPhoto = true;
       this.s3Uploader
-        .uploadFile(selectedFile, this.profile)
+        .uploadFile(resizedFile, this.profile)
         .then((url) => {
-          this.user.photoUrl = url;
-          this.isLoadingPhoto = false;
-          console.log('la ruta actual es')
-          console.log(this.router.url)//
-          this.router
-            .navigateByUrl(this.router.url, { skipLocationChange: true })
-            .then(() => {
-              console.log('navegara a' )
-              console.log(this.router.url )
-              this.router.navigate([this.router.url]);
-            });
 
-          // Almacena la imagen en photoUrl para mostrarla localmente pues como no se ha recargado la pagina ...
-          // no se muestra la url almacenada en los datos del usuario
-          /* const reader = new FileReader();
+          //se guarda la URL en la base de datos
 
-          reader.onload = (e: ProgressEvent<FileReader>) => {
-            this.photoUrl = e.target?.result || '/sin-perfil.jpg'
-          };
+        this.usersService.updateProfilePhoto(url).subscribe({
+          next: (response)=>{
+            console.log(response)
+            this.user.photoUrl = url;
+            this.isLoadingPhoto = false;
+          },
+          error:(err)=>{
+            console.log(err)
+            this.isLoadingPhoto = false;
+          }
+        })
 
-          reader.readAsDataURL(selectedFile) */
+       /*  this.user.photoUrl = url;
+        this.isLoadingPhoto = false; */
+
+          
         })
         .catch((error) => {
           console.log(error);

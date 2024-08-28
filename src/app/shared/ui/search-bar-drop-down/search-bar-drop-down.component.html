@@ -10,13 +10,13 @@
 
     <li>
       <button
-        class="flex w-full shadow-md pl-2 rounded-md border-gray-medium py-2"
+        class="flex w-full shadow-md pl-2 rounded-md border-gray-medium py-2 gap-1 md:gap-2"
         [routerLink]="['/user/profile', user.username]"
         (click)="onClickSearchResult()"
       >
         <!-- Foto Perfil -->
         <div class="flex justify-center items-center">
-          <img [src]="'/sin-perfil.jpg'" alt="Logo" class="h-14 rounded-full" />
+          <img [src]="user.photoUrl || '/sin-perfil.jpg'" alt="Logo" class="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover shadow-lg" />
         </div>
         <!-- Nombre y usuario -->
         <div class="flex flex-col items-start pl-2 gap-0.5">

@@ -7,7 +7,7 @@ import {
 } from '@ngrx/signals';
 import { IUserStore } from '../shared/interfaces/user.interface';
 import { inject } from '@angular/core';
-import { getToken } from '../user/data-access/local-storage';
+import { getToken, removeToken } from '../user/data-access/local-storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export interface IState {
@@ -68,7 +68,7 @@ export const Store = signalStore(
 
         http
           .get<IUserStore>(
-            'https://wawp912c89.execute-api.us-east-1.amazonaws.com/prod/users/refresh-page',
+            'https://5cs7gjy54k.execute-api.us-east-1.amazonaws.com/prod/users/refresh-page',
             { headers }
           )
           .subscribe({
@@ -78,6 +78,7 @@ export const Store = signalStore(
             },
             error: (err) => {
               store.setLoading(false);
+              removeToken()
             },
           });
       }
