@@ -13,7 +13,7 @@ export class S3UploaderService {
 
   region = 'us-east-1'; //environment.region
 
-  async uploadFile(file: File, type: string): Promise<any> {
+  async uploadFile(file: File, type: string): Promise<string> {
     return new Promise(async (resolve, reject) => {
       await this.usersService.getS3Credentials().subscribe({
         next: async (response) => {

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsersService } from '../data-access/users.service';
 import {
@@ -35,7 +35,8 @@ export default class ProfileComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private s3Uploader: S3UploaderService
+    private s3Uploader: S3UploaderService,
+    private router: Router
   ) {}
 
   isLoading = false;
@@ -102,28 +103,36 @@ export default class ProfileComponent implements OnInit {
 
   profile = constants.PROFILE;
 
-  photoUrl: string | ArrayBuffer | null = '/sin-perfil.jpg'
+  photoUrl: string | ArrayBuffer | null = '';
 
   async uploadFile(selectedFile: File) {
     if (selectedFile) {
+      this.user.photoUrl = '';
       this.isLoadingPhoto = true;
       this.s3Uploader
         .uploadFile(selectedFile, this.profile)
         .then((url) => {
-          console.log('se cargo la foto');
-          /* this.photoUrl = url */
-          console.log(url);
+          this.user.photoUrl = url;
           this.isLoadingPhoto = false;
+          console.log('la ruta actual es')
+          console.log(this.router.url)//
+          this.router
+            .navigateByUrl(this.router.url, { skipLocationChange: true })
+            .then(() => {
+              console.log('navegara a' )
+              console.log(this.router.url )
+              this.router.navigate([this.router.url]);
+            });
 
           // Almacena la imagen en photoUrl para mostrarla localmente pues como no se ha recargado la pagina ...
           // no se muestra la url almacenada en los datos del usuario
-          const reader = new FileReader();
+          /* const reader = new FileReader();
 
           reader.onload = (e: ProgressEvent<FileReader>) => {
             this.photoUrl = e.target?.result || '/sin-perfil.jpg'
           };
 
-          reader.readAsDataURL(selectedFile)
+          reader.readAsDataURL(selectedFile) */
         })
         .catch((error) => {
           console.log(error);
@@ -150,11 +159,11 @@ export default class ProfileComponent implements OnInit {
       //Peticion HTTP GET para obtener el perfil del usuario
       this.usersService.getUserProfile(usernameParam).subscribe({
         next: (response: any) => {
+          console.log('se cargo inicialmente');
+          console.log(this.photoUrl);
+          console.log(response.user);
           this.user = response.user;
           this.isFollowing = response.isFollowing;
-
-          console.log('Sigue al usuario' + response.isFollowing);
-
           this.isLoading = false;
         },
         error: (error: HttpErrorResponse) => {
