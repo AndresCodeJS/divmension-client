@@ -46,6 +46,9 @@ export class LoginFormComponent {
     const clickedInside = this.el.nativeElement.contains(event.target);
     if (!clickedInside) {
       if(!this.closeLoginForm){
+        this.form.reset()
+        this.errors.password = false
+        this.errors.username = false
         this.closeFormEventEmitter.emit(true);
       }
     }
@@ -58,6 +61,8 @@ export class LoginFormComponent {
   openSignUpForm(){
 
     this.form.reset()
+    this.errors.password = false
+    this.errors.username = false
     this.openSignUpFormEventEmitter.emit(true)
     this.closeFormEventEmitter.emit(true);
   }
@@ -111,7 +116,7 @@ export class LoginFormComponent {
   isLoading = false
 
   onSubmit() {
-    if (!this.form.invalid) {
+    if (!this.form.invalid && !this.errors.username &&  !this.errors.password) {
 
       this.isLoading = true
 

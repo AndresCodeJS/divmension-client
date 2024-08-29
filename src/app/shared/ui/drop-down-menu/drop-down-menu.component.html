@@ -73,6 +73,15 @@
    <ul class="flex flex-col gap-3">
     <li>
       <button
+        [routerLink]="['/user/profile', store.user().username]"
+        class="font-bold text-gray-heavy text-sm"
+        (click)="onClickMenuOptions('profile')"
+      >
+        My Profile
+      </button>
+    </li>
+    <li>
+      <button
         (click)="onClickLogOut()"
         class="font-bold text-gray-heavy text-sm"
       >

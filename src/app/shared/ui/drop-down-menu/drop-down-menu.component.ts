@@ -10,11 +10,12 @@ import {
 import { constants } from '../../../global';
 import { Store } from '../../../store/store';
 import { removeToken } from '../../../user/data-access/local-storage';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-drop-down-menu',
   standalone: true,
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './drop-down-menu.component.html',
   styles: ``,
 })

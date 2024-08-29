@@ -2,7 +2,7 @@
   class="fixed flex flex-row justify-center items-center rounded-3xl modal-login"
 >
   <div
-    class="flex flex-col items-center bg-white w-full h-full rounded-2xl px-10 md:px-16 lg:px-10 py-8 lg:py-14"
+    class="flex flex-col items-center bg-white w-full h-full rounded-2xl px-10 md:px-16 lg:px-10 py-8 lg:py-14 "
   >
     <div class="flex w-full justify-center mb-1 sm:mb-5">
       <p class="font-bold text-3xl">Log In</p>
@@ -15,9 +15,9 @@
     >
       <!-- INPUTS ------------------------------------------->
 
-      <div class="flex flex-col w-full pt-5">
+      <div class="flex flex-col w-full pt-5 gap-2 md:gap-5 md:mb-3 mt-5 sm:mt-2">
         <!-- USERNAME -->
-        <div class="relative flex flex-col w-full mb-3">
+        <div class="relative flex flex-col w-full ">
           <label class="form-label">USERNAME</label>
 
           <input
@@ -27,6 +27,11 @@
             class="form-input py-4"
             (keydown)="onKeyDown()"
           />
+          <div class="h-5 text-orange mt-1 ">
+            @if(errors.username){
+              <small>*Invalid username</small>
+            }
+          </div>
         </div>
 
         <!-- PASSWORD -->
@@ -39,15 +44,20 @@
             class="form-input"
             (keydown)="onKeyDown()"
           />
+          <div class="h-5 text-orange mt-1 ">
+            @if(errors.password){
+            <small>*Invalid password</small>
+            }
+          </div>
         </div>
       </div>
 
       <button
         type="submit"
-        [disabled]="form.invalid || isLoading"
+        [disabled]="form.invalid || isLoading || errors.password || errors.username"
         class="true"
         class="button-full py-2 w-full {{
-          form.invalid || isLoading ? 'hover:bg-black' : ''
+          form.invalid || isLoading || errors.password || errors.username ? 'hover:bg-black' : ''
         }}"
       >
         @if( isLoading){

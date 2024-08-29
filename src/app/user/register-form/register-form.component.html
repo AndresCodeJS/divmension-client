@@ -210,10 +210,10 @@
 
       <button
         type="submit"
-        [disabled]="form.invalid || isLoading"
+        [disabled]="form.invalid || isLoading || errors.email || errors.username"
         class="true"
         class="disabled button-full py-2 w-full {{
-          form.invalid || isLoading ? 'hover:bg-black' : ''
+          form.invalid || isLoading || errors.email || errors.username? 'hover:bg-black' : ''
         }}"
       >
         @if(isLoading){
