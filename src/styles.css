@@ -81,10 +81,19 @@ body {
     right: 35%;
   }
 
+  .new-post {
+    bottom: 10%;
+    right: 50%;
+  }
+
   @media screen and (max-width: 640px) {
     .modal-signup {
       width: 80%;
       right: 10%;
+    }
+    .new-post {
+      right: 45%;
+      bottom: 5%;
     }
   }
 
