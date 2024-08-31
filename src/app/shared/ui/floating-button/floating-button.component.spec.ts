@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FloatingButtonComponent } from './floating-button.component';
+import  FloatingButtonComponent  from './floating-button.component';
 
 describe('FloatingButtonComponent', () => {
   let component: FloatingButtonComponent;

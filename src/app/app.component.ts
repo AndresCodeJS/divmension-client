@@ -1,7 +1,8 @@
-import { Component} from '@angular/core';
+import { Component, inject} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/ui/navbar/header.component';
 import  FloatingButtonComponent  from './shared/ui/floating-button/floating-button.component';
+import { Store } from './store/store';
 
 @Component({
   selector: 'app-root',
@@ -11,5 +12,7 @@ import  FloatingButtonComponent  from './shared/ui/floating-button/floating-butt
   styleUrl: './app.component.css',
 })
 export class AppComponent {
+
+  store = inject(Store)
 
 }

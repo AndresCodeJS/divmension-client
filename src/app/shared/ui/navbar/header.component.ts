@@ -25,18 +25,6 @@ import { UsersService } from '../../../user/data-access/users.service';
   templateUrl: './header.component.html',
   styles: ``,
   providers: [UsersService],
-  /*  animations: [
-    trigger('openClose', [
-      transition(':enter', [
-        style({ transform: 'translateX(120%)' }),
-        animate('{3s ease-in', style({ transform: 'translateX(0)' })),
-      ]),
-      transition(':leave', [
-        style({ transform: 'translateX(0)' }),
-        animate('3s ease-in', style({ transform: 'translateX(120%)' })),
-      ]),
-    ]),
-  ], */
 })
 export class HeaderComponent {
   constructor() {

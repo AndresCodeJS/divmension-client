@@ -13,6 +13,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export interface IState {
   user: IUserStore;
   isLoading: boolean;
+  hideButton: boolean
 }
 
 const initialState: IState = {
@@ -23,6 +24,7 @@ const initialState: IState = {
     photoUrl: '',
   },
   isLoading: false,
+  hideButton: false
 };
 
 export const Store = signalStore(
@@ -48,6 +50,10 @@ export const Store = signalStore(
       setLoading(value: boolean) {
         patchState(store, { isLoading: value });
       },
+      hideFloatingButton(value: boolean){
+        patchState(store, { hideButton: value});
+        
+      }
     };
   }),
   withHooks({
