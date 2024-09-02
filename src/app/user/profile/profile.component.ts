@@ -136,11 +136,7 @@ export default class ProfileComponent implements OnInit {
             this.isLoadingPhoto = false;
           }
         })
-
-       /*  this.user.photoUrl = url;
-        this.isLoadingPhoto = false; */
-
-          
+   
         })
         .catch((error) => {
           console.log(error);

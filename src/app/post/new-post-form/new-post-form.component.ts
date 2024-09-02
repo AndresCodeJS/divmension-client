@@ -8,6 +8,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import {
+  ImageResizeService,
+  S3UploaderService,
+} from '../../shared/data-access/s3.service';
+import { constants } from '../../global';
+import { PostsService } from '../../user/data-access/post.service';
+
 
 @Component({
   selector: 'app-new-post-form',
@@ -17,7 +24,11 @@ import {
   styles: ``,
 })
 export default class NewPostFormComponent implements OnInit, OnDestroy {
-  constructor(private route: Router) {}
+  constructor(
+    private imageResizer: ImageResizeService,
+    private s3Uploader: S3UploaderService,
+    private router: Router
+  ) {}
 
   fb = inject(NonNullableFormBuilder);
   form = this.fb.group({
@@ -38,13 +49,13 @@ export default class NewPostFormComponent implements OnInit, OnDestroy {
   }
 
   //Registro de errores cuando el usuario o password son incorrectos ------------------------------
-/*   errors = {
+  /*   errors = {
     username: false,
     password: false,
   }; */
 
   onKeyDown() {
-  /*   this.errors.username = false;
+    /*   this.errors.username = false;
     this.errors.password = false; */
   }
 
@@ -52,16 +63,19 @@ export default class NewPostFormComponent implements OnInit, OnDestroy {
 
   store = inject(Store);
 
-  isLoading = false;
-
   //Ocultar el boton al abrir el formulario de nuevo post ----------------------------------------
   ngOnInit(): void {
+    if(!this.store.user().username){
+      this.router.navigate(['/']);
+    }
+
     this.store.hideFloatingButton(true);
   }
 
   //Mostrar el boton al cerrar el formulario -----------------------------------------------------
   ngOnDestroy(): void {
     this.store.hideFloatingButton(false);
+    this.form.reset()
   }
 
   // CARGA DE IMAGEN --------------------------------------------------------------------
@@ -74,15 +88,15 @@ export default class NewPostFormComponent implements OnInit, OnDestroy {
       if (event.target.files.length) {
         if (event.target.files[0].type.match(/image\/*/)) {
           // solo imagenes
-          let selectedFile = event.target.files[0] as File;
+          this.selectedFile = event.target.files[0] as File;
 
           //Cargar la imagen para mostrarla
           const reader = new FileReader();
           reader.onload = (e: ProgressEvent<FileReader>) => {
             this.imageUrl = e.target?.result || null;
           };
-          reader.readAsDataURL(selectedFile);
-          
+          reader.readAsDataURL(this.selectedFile);
+
           /* await this.uploadFile(selectedFile); */
         } else {
           this.selectedFile = null;
@@ -98,5 +112,66 @@ export default class NewPostFormComponent implements OnInit, OnDestroy {
     fileInput.click();
   }
 
-  onSubmit() {}
+  post = constants.POST;
+
+  postService = inject(PostsService);
+
+  isLoading = false;
+
+  async uploadFile(selectedFile: File) {
+    if (selectedFile) {
+      //Se modifican las dimensiones de la imagen
+      const resizedFile = (await this.imageResizer.resizeImage(
+        selectedFile,
+        400,
+        400
+      )) as File;
+
+      this.isLoading = true;
+
+      //Subida de la foto a S3
+      this.s3Uploader
+        .uploadFile(resizedFile, this.post)
+        .then((imageUrl) => {
+          console.log('la url es', imageUrl);
+
+          //Registro del post en la base de datos
+          this.postService
+            .createPost({
+              description: this.form.getRawValue().description,
+              imageUrl,
+            })
+            .subscribe({
+              next: (response) => {
+                console.log(response);
+                this.form.reset()
+                this.isLoading = false
+                this.router.navigate([
+                  `/user/profile/${this.store.user().username}`,
+                ]);
+              },
+              error: (error) => {
+                console.log(error);
+                this.isLoading = false
+              },
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false
+        });
+    }
+  }
+
+  async onSubmit() {
+    if (!this.form.invalid) {
+      console.log(this.form.getRawValue());
+      console.log(this.selectedFile);
+      if (this.selectedFile) {
+        await this.uploadFile(this.selectedFile);
+      } else {
+        console.log('no se encontro');
+      }
+    }
+  }
 }

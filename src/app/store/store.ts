@@ -83,6 +83,7 @@ export const Store = signalStore(
               store.setLoading(false);
             },
             error: (err) => {
+              console.log(err)
               store.setLoading(false);
               removeToken()
             },
