@@ -10,6 +10,7 @@ import {
 import { Store } from '../../store/store';
 import { S3UploaderService, ImageResizeService } from '../../shared/data-access/s3.service';
 import { constants } from '../../global';
+import {truncateText, mostrarTexto} from '../utils/stringManager'
 
 @Component({
   selector: 'app-profile',
@@ -24,13 +25,16 @@ export default class ProfileComponent implements OnInit {
 
   isFollowing = false;
 
+  truncateDescription = truncateText
+  mostrarDescription = mostrarTexto
+
   user: IUserProfile = {
     username: '',
     fullname: '',
     photoUrl: '',
     followers: 0,
     following: 0,
-    posts: 0,
+    postCounter: 0,
   };
 
   constructor(
@@ -153,6 +157,9 @@ export default class ProfileComponent implements OnInit {
       console.log('no hay archivo');
     }
   }
+
+  textoFormateado = ''
+
   // Cargar los datos al acceder al perfil del usuario -------------------------------------------------
   ngOnInit(): void {
     this.subscription = this.route.paramMap.subscribe((params) => {
@@ -163,10 +170,11 @@ export default class ProfileComponent implements OnInit {
       //Peticion HTTP GET para obtener el perfil del usuario
       this.usersService.getUserProfile(usernameParam).subscribe({
         next: (response: any) => {
-          console.log('se cargo inicialmente');
-          console.log(this.photoUrl);
-          console.log(response.user);
+ 
           this.user = response.user;
+
+          /* this.textoFormateado = this.mostrarDescription('asasa\n\nsasa\n\n      andres\n\n\nsasasa') */
+          console.log(this.textoFormateado)
           this.isFollowing = response.isFollowing;
           this.isLoading = false;
         },

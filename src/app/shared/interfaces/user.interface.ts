@@ -30,5 +30,5 @@ export interface IUserProfile {
   photoUrl: string;
   followers: number;
   following: number;
-  posts: number;
+  postCounter: number;
 }
