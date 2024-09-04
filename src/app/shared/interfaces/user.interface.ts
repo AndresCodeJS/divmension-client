@@ -1,3 +1,5 @@
+import { IPostList } from "./post.interface";
+
 export interface IUser {
   username: string;
   email: string;
@@ -31,4 +33,5 @@ export interface IUserProfile {
   followers: number;
   following: number;
   postCounter: number;
+  posts: IPostList[]
 }

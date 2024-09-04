@@ -10,12 +10,14 @@ import {
 import { Store } from '../../store/store';
 import { S3UploaderService, ImageResizeService } from '../../shared/data-access/s3.service';
 import { constants } from '../../global';
-import {truncateText, mostrarTexto} from '../utils/stringManager'
+import {truncateText} from '../../utils/stringManager'
+import { elapsedTime } from '../../utils/timeManager';
+import { PostCardComponent } from "../../post/post-card/post-card.component";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [],
+  imports: [PostCardComponent],
   templateUrl: './profile.component.html',
   styles: ``,
   providers: [UsersService],
@@ -26,7 +28,7 @@ export default class ProfileComponent implements OnInit {
   isFollowing = false;
 
   truncateDescription = truncateText
-  mostrarDescription = mostrarTexto
+  postDate = elapsedTime
 
   user: IUserProfile = {
     username: '',
@@ -35,6 +37,7 @@ export default class ProfileComponent implements OnInit {
     followers: 0,
     following: 0,
     postCounter: 0,
+    posts: []
   };
 
   constructor(
@@ -170,11 +173,13 @@ export default class ProfileComponent implements OnInit {
       //Peticion HTTP GET para obtener el perfil del usuario
       this.usersService.getUserProfile(usernameParam).subscribe({
         next: (response: any) => {
+
+          console.log('respuesta',response.user)
  
           this.user = response.user;
-
-          /* this.textoFormateado = this.mostrarDescription('asasa\n\nsasa\n\n      andres\n\n\nsasasa') */
-          console.log(this.textoFormateado)
+          this.textoFormateado = this.truncateDescription("cloy \ncloy\ncloy\ncloy \ncloy\n\ncloy",75)
+         /*  this.textoFormateado = this.mostrarDescription('asasa\n\nsasa\n\n      andres\n\n\nsasasa') */
+          console.log('texto formateado',this.textoFormateado)
           this.isFollowing = response.isFollowing;
           this.isLoading = false;
         },

@@ -4,8 +4,10 @@ export interface IPost {
 }
 
 export interface IPostList {
-    username:string,
-    description: string;
-    imageUrl: string;
-    timestamp: number;
+  username: string,
+  postId: string,
+  description: string,
+  timeStamp: number
+  likesQuantity: number,
+  commentsQuantity: number ,
   }
