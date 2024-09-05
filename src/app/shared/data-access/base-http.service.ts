@@ -7,5 +7,5 @@ import { Injectable, inject } from "@angular/core";
 
 export class BaseHttpService {
     http = inject(HttpClient)
-    apiUrl = "https://5cs7gjy54k.execute-api.us-east-1.amazonaws.com/prod"
+    apiUrl = "https://2cqvxzd6yh.execute-api.us-east-1.amazonaws.com/prod"
 }

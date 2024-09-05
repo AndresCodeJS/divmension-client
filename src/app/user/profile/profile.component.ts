@@ -1,19 +1,20 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, HostListener, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsersService } from '../data-access/users.service';
-import {
-  IUserList,
-  IUserProfile,
-} from '../../shared/interfaces/user.interface';
+import { IUserProfile } from '../../shared/interfaces/user.interface';
 import { Store } from '../../store/store';
-import { S3UploaderService, ImageResizeService } from '../../shared/data-access/s3.service';
+import {
+  S3UploaderService,
+  ImageResizeService,
+} from '../../shared/data-access/s3.service';
 import { constants } from '../../global';
-import {truncateText} from '../../utils/stringManager'
+import { truncateText } from '../../utils/stringManager';
 import { elapsedTime } from '../../utils/timeManager';
-import { PostCardComponent } from "../../post/post-card/post-card.component";
-import { CheckedIconComponent } from "../utils/checked-icon/checked-icon.component";
+import { PostCardComponent } from '../../post/post-card/post-card.component';
+import { CheckedIconComponent } from '../utils/checked-icon/checked-icon.component';
+import { PostsService } from '../data-access/post.service';
 
 @Component({
   selector: 'app-profile',
@@ -28,52 +29,51 @@ export default class ProfileComponent implements OnInit {
 
   isFollowing = false;
 
-  truncateDescription = truncateText
-  postDate = elapsedTime
+  truncateDescription = truncateText;
+  postDate = elapsedTime;
 
-  loadingPosts = false
-  queryExecuted = false
+  loadingPosts = false;
+  queryExecuted = false;
 
-
-/* condition = false */
+  private postsService = inject(PostsService);
 
   //Carga nuevos posts cuando se hace scroll hasta la penultima fila
-  onScroll(event :any){
+  onScroll(event: any) {
     const element = event.target as HTMLElement;
-   /*  console.log('scroll height', element.scrollHeight)
-    console.log('scroll top', element.scrollTop)
-    console.log('client heigth', element.clientHeight) */
-    /* const atBottom = element.scrollHeight - element.scrollTop === element.clientHeight; */
-   /*  console.log('diff', element.scrollHeight - element.scrollTop) */
-    const atBottom = element.scrollHeight - element.scrollTop < element.clientHeight+500;
 
-    if (atBottom && !this.queryExecuted ) {
-      console.log('Llegaste al final del contenedor');
-      
-      this.loadingPosts  = true
-      this.queryExecuted = true
+    //Verdadero cuando se hace scroll hasta la penultima fila de la lista de posts
+    const atBottom =
+      element.scrollHeight - element.scrollTop < element.clientHeight + 500;
 
-     //TODO realizar consulta con paginacion a la base de datos
-     //Enviar username, startkey
+    if (atBottom && !this.queryExecuted && this.user.lastPostKey) {
+      /* console.log('Llegaste al final del contenedor'); */
 
-     this.queryExecuted = false
+      this.loadingPosts = true;
+
+      //Variable usada para no ejecutar la consulta mas de una vez
+      this.queryExecuted = true;
+
+      //Obtiene los siguientes posts al paginar haciendo scroll hacia abajo
+      this.postsService.getPostsByUser(this.user.lastPostKey).subscribe({
+        next: (response) => {
+          if (response.posts.length) {
+            /* console.log('respuesta paginacion', response) */
+            let concatArray = this.user.posts.concat(response.posts);
+            this.user.posts = concatArray;
+            this.user.lastPostKey = response.lastEvaluatedKey;
+            this.queryExecuted = false;
+            this.loadingPosts = false;
+          }
+        },
+        error: (error) => {
+          console.log(error);
+          this.queryExecuted = false;
+          this.loadingPosts = false;
+          this.user.lastPostKey = '';
+        },
+      });
     }
   }
-
- 
-
-    @HostListener('scroll', ['$event'])
-    onWindowScroll(event: Event): void {
-      const scrollPosition = window.scrollY;
-      console.log('Posición del scroll:', scrollPosition);
-      
-      // Puedes agregar lógica aquí para manipular la UI según la posición del scroll
-      if (scrollPosition > 50) {
-        // Cambiar el estilo o realizar una acción
-      }
-    }
-
- 
 
   user: IUserProfile = {
     username: '',
@@ -83,7 +83,7 @@ export default class ProfileComponent implements OnInit {
     following: 0,
     postCounter: 0,
     posts: [],
-    lastPostKey: ''
+    lastPostKey: '',
   };
 
   constructor(
@@ -160,54 +160,48 @@ export default class ProfileComponent implements OnInit {
 
   async uploadFile(selectedFile: File) {
     if (selectedFile) {
-
       //Se modifican las dimensiones de la imagen
-      const resizedFile = await this.imageResizer.resizeImage(selectedFile,400,400) as File
+      const resizedFile = (await this.imageResizer.resizeImage(
+        selectedFile,
+        400,
+        400
+      )) as File;
 
-      console.log('Normal Image')
-      console.log(selectedFile.size)
+      console.log('Normal Image');
+      console.log(selectedFile.size);
 
-      console.log('Image resized')
-      console.log(resizedFile.size)
+      console.log('Image resized');
+      console.log(resizedFile.size);
 
       this.user.photoUrl = '';
       this.isLoadingPhoto = true;
       this.s3Uploader
         .uploadFile(resizedFile, this.profile)
         .then((url) => {
-
           //se guarda la URL en la base de datos
 
-        this.usersService.updateProfilePhoto(url).subscribe({
-          next: (response)=>{
-            console.log(response)
-            this.user.photoUrl = url;
-            this.isLoadingPhoto = false;
-          },
-          error:(err)=>{
-            console.log(err)
-            this.isLoadingPhoto = false;
-          }
-        })
-   
+          this.usersService.updateProfilePhoto(url).subscribe({
+            next: (response) => {
+              console.log(response);
+              this.user.photoUrl = url;
+              this.isLoadingPhoto = false;
+            },
+            error: (err) => {
+              console.log(err);
+              this.isLoadingPhoto = false;
+            },
+          });
         })
         .catch((error) => {
           console.log(error);
           this.isLoadingPhoto = false;
         });
-
-      /*    if(response?.photoUrl){
-        console.log('se cargo la foto')
-        console.log(response.photoUrl)
-      }
-      
-      this.isLoadingPhoto = false */
     } else {
       console.log('no hay archivo');
     }
   }
 
-  textoFormateado = ''
+  textoFormateado = '';
 
   // Cargar los datos al acceder al perfil del usuario -------------------------------------------------
   ngOnInit(): void {
@@ -219,13 +213,10 @@ export default class ProfileComponent implements OnInit {
       //Peticion HTTP GET para obtener el perfil del usuario
       this.usersService.getUserProfile(usernameParam).subscribe({
         next: (response: any) => {
+          console.log('respuesta', response.user);
 
-          console.log('respuesta',response.user)
- 
           this.user = response.user;
-          this.textoFormateado = this.truncateDescription("cloy \ncloy\ncloy\ncloy \ncloy\n\ncloy",75)
-         /*  this.textoFormateado = this.mostrarDescription('asasa\n\nsasa\n\n      andres\n\n\nsasasa') */
-          console.log('texto formateado',this.textoFormateado)
+
           this.isFollowing = response.isFollowing;
           this.isLoading = false;
         },

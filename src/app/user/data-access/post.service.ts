@@ -28,4 +28,14 @@ export class PostsService extends BaseHttpService {
       headers,
     });
   }
+  getPostsByUser(lastPostKey: any): Observable<any> {
+
+    console.log('se hara el llamado con, ',lastPostKey)
+    let pkParam = lastPostKey.pk.split('#')[0] // -> obtiene el username
+    let skParam = lastPostKey.sk;
+
+    return this.http.get<any>(
+      `${this.apiUrl}/posts/user/${pkParam}/${skParam}`
+    );
+  }
 }
