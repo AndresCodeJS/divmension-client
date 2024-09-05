@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, NgZone, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -11,5 +11,15 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptors([ErrorResponseInterceptor])),
+    {
+      provide: NgZone,
+      useFactory: () => {
+        return new NgZone({
+          /* enableLongStackTrace:true, */
+          shouldCoalesceEventChangeDetection:true,
+          shouldCoalesceRunChangeDetection:true
+        });
+      }
+    }
   ],
 };

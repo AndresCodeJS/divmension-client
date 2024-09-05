@@ -1,11 +1,11 @@
-<div class="flex flex-col items-center w-full p-2 bg-orange">
+<div class="flex flex-col items-center w-full p-2 ">
   <div
     class="flex flex-col bg-gray-medium w-72 h-[30rem] p-2 rounded-lg shadow-lg"
   >
     <!-- IMAGEN -->
     <div>
       <img
-        [src]="'/sin-perfil.jpg'"
+        [src]="post.imageUrl || '/sin-perfil.jpg'"
         alt="Logo"
         class="w-72 h-72 object-cover shadow-lg rounded-lg"
       />
@@ -53,8 +53,8 @@
     <!-- DESCRIPCION -->
     <div class="flex text-gray-heavy pt-3 ml-2 max-w-64 h-24 ">
       <pre
-        class="whitespace-pre-wrap break-words text-sm font-medium max-w-60"
-      ><span class="mr-2 font-semibold text-base text-gray-hover">{{isProfileView?'':post.username}}</span>{{truncateDescription(post.description,75)}}</pre>
+        class="whitespace-pre-wrap break-words text-sm font-normal font-sans max-w-60"
+      ><span class="mr-2 font-semibold text-base text-gray-hover {{isProfileView?'hidden':''}}">{{post.username}}</span>{{truncateDescription(post.description,75)}}</pre>
     </div>
     <!--  TIMESTAMP -->
     <div class="flex justify-end pr-5 w-full pt-2">

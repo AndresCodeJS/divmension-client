@@ -83,7 +83,7 @@ body {
 
   .new-post {
     bottom: 10%;
-    right: 50%;
+    right: 48.5%;
   }
 
   @media screen and (max-width: 640px) {
@@ -92,7 +92,7 @@ body {
       right: 10%;
     }
     .new-post {
-      right: 45%;
+      right: 43.5%;
       bottom: 5%;
     }
   }
@@ -113,6 +113,7 @@ body {
       height: 55%;
       top: 20%
     }
+   
   }
 
   @media screen and (min-width: 1000px) {

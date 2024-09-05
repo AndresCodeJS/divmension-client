@@ -6,6 +6,7 @@ export interface IPost {
 export interface IPostList {
   username: string,
   postId: string,
+  imageUrl:string,
   description: string,
   timeStamp: number
   likesQuantity: number,

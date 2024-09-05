@@ -33,5 +33,6 @@ export interface IUserProfile {
   followers: number;
   following: number;
   postCounter: number;
-  posts: IPostList[]
+  posts: IPostList[];
+  lastPostKey?:any
 }

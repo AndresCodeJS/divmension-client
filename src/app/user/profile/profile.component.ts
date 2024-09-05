@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsersService } from '../data-access/users.service';
@@ -13,11 +13,12 @@ import { constants } from '../../global';
 import {truncateText} from '../../utils/stringManager'
 import { elapsedTime } from '../../utils/timeManager';
 import { PostCardComponent } from "../../post/post-card/post-card.component";
+import { CheckedIconComponent } from "../utils/checked-icon/checked-icon.component";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [PostCardComponent],
+  imports: [PostCardComponent, CheckedIconComponent],
   templateUrl: './profile.component.html',
   styles: ``,
   providers: [UsersService],
@@ -30,6 +31,50 @@ export default class ProfileComponent implements OnInit {
   truncateDescription = truncateText
   postDate = elapsedTime
 
+  loadingPosts = false
+  queryExecuted = false
+
+
+/* condition = false */
+
+  //Carga nuevos posts cuando se hace scroll hasta la penultima fila
+  onScroll(event :any){
+    const element = event.target as HTMLElement;
+   /*  console.log('scroll height', element.scrollHeight)
+    console.log('scroll top', element.scrollTop)
+    console.log('client heigth', element.clientHeight) */
+    /* const atBottom = element.scrollHeight - element.scrollTop === element.clientHeight; */
+   /*  console.log('diff', element.scrollHeight - element.scrollTop) */
+    const atBottom = element.scrollHeight - element.scrollTop < element.clientHeight+500;
+
+    if (atBottom && !this.queryExecuted ) {
+      console.log('Llegaste al final del contenedor');
+      
+      this.loadingPosts  = true
+      this.queryExecuted = true
+
+     //TODO realizar consulta con paginacion a la base de datos
+     //Enviar username, startkey
+
+     this.queryExecuted = false
+    }
+  }
+
+ 
+
+    @HostListener('scroll', ['$event'])
+    onWindowScroll(event: Event): void {
+      const scrollPosition = window.scrollY;
+      console.log('Posición del scroll:', scrollPosition);
+      
+      // Puedes agregar lógica aquí para manipular la UI según la posición del scroll
+      if (scrollPosition > 50) {
+        // Cambiar el estilo o realizar una acción
+      }
+    }
+
+ 
+
   user: IUserProfile = {
     username: '',
     fullname: '',
@@ -37,7 +82,8 @@ export default class ProfileComponent implements OnInit {
     followers: 0,
     following: 0,
     postCounter: 0,
-    posts: []
+    posts: [],
+    lastPostKey: ''
   };
 
   constructor(

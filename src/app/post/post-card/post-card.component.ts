@@ -22,7 +22,8 @@ export class PostCardComponent {
     description: '',
     timeStamp: 0,
     likesQuantity: 0,
-    commentsQuantity: 0
+    commentsQuantity: 0,
+    imageUrl: ''
   }
   @Input() isProfileView: boolean = false
 
