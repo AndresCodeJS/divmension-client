@@ -3,11 +3,12 @@ import { truncateText } from '../../utils/stringManager';
 import { elapsedTime } from '../../utils/timeManager';
 import { IUserProfile } from '../../shared/interfaces/user.interface';
 import { IPostList } from '../../shared/interfaces/post.interface';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-post-card',
   standalone: true,
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './post-card.component.html',
   styles: ``
 })

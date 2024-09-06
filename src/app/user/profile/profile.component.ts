@@ -15,11 +15,12 @@ import { elapsedTime } from '../../utils/timeManager';
 import { PostCardComponent } from '../../post/post-card/post-card.component';
 import { CheckedIconComponent } from '../utils/checked-icon/checked-icon.component';
 import { PostsService } from '../data-access/post.service';
+import { LoadingScreenComponent } from "../../shared/ui/loading-screen/loading-screen.component";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [PostCardComponent, CheckedIconComponent],
+  imports: [PostCardComponent, CheckedIconComponent, LoadingScreenComponent],
   templateUrl: './profile.component.html',
   styles: ``,
   providers: [UsersService],
