@@ -20,8 +20,8 @@ import { UsersService } from '../../../user/data-access/users.service';
     SearchBarDropDownComponent,
     DropDownMenuComponent,
     RegisterFormComponent,
-    LoginFormComponent,
-  ],
+    LoginFormComponent
+],
   templateUrl: './header.component.html',
   styles: ``,
   providers: [UsersService],

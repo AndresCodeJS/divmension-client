@@ -89,7 +89,7 @@
 
   <!-- OPTIONS -->
 
-  <div class="flex justify-end gap-4 mr-2 md:mr-10 w-1/12 lg:w-2/12">
+  <div class="flex justify-end gap-4 mr-2 md:mr-10 {{store.user().username?'w-2/12':'w-1/12'}} lg:w-2/12">
     @if(!store.isLoading()){ @if(!store.user().username){
     <div class="hidden lg:flex gap-4">
       <button
@@ -112,6 +112,7 @@
     />
 
     }@else {
+    
     <app-drop-down-menu (onClickMenuEmitter)="onClickMenu($event)" />
 
     } }

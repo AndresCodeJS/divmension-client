@@ -62,8 +62,6 @@ body {
     height: 20px;
     transform: rotate(45deg);
     background-color: white;
-    /*  border-left: 0.5px solid gray;
-        border-top: 1px solid gray; */
   }
 
   /* Para ventanas modales register-form y login-form -----------------------------------*/
@@ -81,20 +79,20 @@ body {
     right: 35%;
   }
 
-  .new-post {
+/*   .new-post {
     bottom: 10%;
     right: 48.5%;
-  }
+  } */
 
   @media screen and (max-width: 640px) {
     .modal-signup {
       width: 80%;
       right: 10%;
     }
-    .new-post {
+ /*    .new-post {
       right: 43.5%;
       bottom: 5%;
-    }
+    } */
   }
 
   @media screen and (min-width: 250px) {
@@ -125,37 +123,6 @@ body {
     }
   }
 
- 
-
-/*   @media screen and (max-width: 900px) {
-    .modal-login {
-      width: 65%;
-      right: 17%;
-    }
-  } */
-
- 
-
- /*  .fade-in {
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-  }
-
-  .fade-in.show {
-    opacity: 0.5;
-  } */
 }
 
-/* .dropDownMenu{
-@apply absolute top-20 right-5 w-36 p-4 rounded-lg bg-white border border-gray-light
-} */
 
-/* @layer components {
-  .searchbar-input::placeholder {
-    @apply text-xs sm:text-md text-gray-500;
-  }
-} */
-
-/* button:hover{
-    @apply  border-white
-} */

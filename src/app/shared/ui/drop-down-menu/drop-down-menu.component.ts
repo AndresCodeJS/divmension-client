@@ -11,11 +11,12 @@ import { constants } from '../../../global';
 import { Store } from '../../../store/store';
 import { removeToken } from '../../../user/data-access/local-storage';
 import { RouterModule } from '@angular/router';
+import FloatingButtonComponent from "../floating-button/floating-button.component";
 
 @Component({
   selector: 'app-drop-down-menu',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, FloatingButtonComponent],
   templateUrl: './drop-down-menu.component.html',
   styles: ``,
 })
