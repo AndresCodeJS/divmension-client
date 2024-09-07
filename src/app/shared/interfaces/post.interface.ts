@@ -8,6 +8,7 @@ export interface IPostList {
   postId: string,
   imageUrl:string,
   description: string,
+  shortDescription?:string,
   timeStamp: number
   likesQuantity: number,
   commentsQuantity: number 

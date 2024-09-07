@@ -143,9 +143,12 @@
       class="grid grid-cols-1 w-[25rem] md:grid-cols-2 md:w-[37rem] lg:grid-cols-3 lg:w-[55rem] mt-10 mb-3 sm:mb-14"
     >
       @for (item of user.posts; track item.postId){
-      <app-post-card [isProfileView]="true" [post]="item" />
+      <button (click)="openPostCard(item)">
+        <app-post-card [isProfileView]="true" [post]="item" />
+      </button>
       }
     </div>
+   
     }@else {
     <div class="flex w-full justify-center mt-20">
       <p class="text-lg md:text-xl text-gray-dark">There aren't posts yet</p>
@@ -184,3 +187,26 @@
 <!-- PAGINA CARGANDO -->
 <app-loading-screen />
 }
+
+<!-- MODAL PARA LOS DETALLES DEL POST -->
+<!-- <div
+class="fixed bg-black h-dvh w-full transition ease-in-out duration-500 {{
+  closeSignForm ? 'opacity-0 invisible' : 'opacity-50 visible'
+}}"
+></div> -->
+ <!-- POST DETAILS ------------------------------->
+ <div
+ class="fixed flex top-0 left-0 justify-center h-dvh w-full  transition ease-in-out duration-500   bg-black {{
+  !isPostCardOpen? 'opacity-0 invisible' : 'opacity-60 visible'
+}}"
+></div>
+ <div
+#postCardContainer
+ class="fixed flex top-0 left-0 justify-center h-dvh w-full transition ease-in-out duration-500 overflow-y-auto {{
+  !isPostCardOpen? 'opacity-0 invisible' : 'opacity-1 visible'
+}}"
+>
+  <app-post-view class="flex mx-5 w-11/12 sm:w-9/12 md:w-10/12 lg:w-6/12" (closePostDetailsEmitter)="closePostCard()" [isPostCardOpen]="isPostCardOpen" [post]="post"/>  
+</div>
+
+

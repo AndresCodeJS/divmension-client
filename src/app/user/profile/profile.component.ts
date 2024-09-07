@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, ElementRef, inject,  OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsersService } from '../data-access/users.service';
 import { IUserProfile } from '../../shared/interfaces/user.interface';
@@ -16,17 +16,27 @@ import { PostCardComponent } from '../../post/post-card/post-card.component';
 import { CheckedIconComponent } from '../utils/checked-icon/checked-icon.component';
 import { PostsService } from '../data-access/post.service';
 import { LoadingScreenComponent } from "../../shared/ui/loading-screen/loading-screen.component";
+import PostViewComponent from "../../post/post-view/post-view.component";
+import { IPostList } from '../../shared/interfaces/post.interface';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [PostCardComponent, CheckedIconComponent, LoadingScreenComponent],
+  imports: [PostCardComponent, CheckedIconComponent, LoadingScreenComponent, PostViewComponent],
   templateUrl: './profile.component.html',
   styles: ``,
   providers: [UsersService],
 })
 export default class ProfileComponent implements OnInit {
   private subscription: Subscription | undefined;
+
+  constructor(
+    private route: ActivatedRoute,
+    private s3Uploader: S3UploaderService,
+    private imageResizer: ImageResizeService
+  ) {}
+
+  @ViewChild('postCardContainer') postCardContainer!: ElementRef;
 
   isFollowing = false;
 
@@ -87,15 +97,39 @@ export default class ProfileComponent implements OnInit {
     lastPostKey: '',
   };
 
-  constructor(
-    private route: ActivatedRoute,
-    private s3Uploader: S3UploaderService,
-    private imageResizer: ImageResizeService
-  ) {}
-
   isLoading = false;
   isLoadingPhoto = false;
   userNotFound = false;
+
+  // ABRIR/CERRAR POST -----------------------------------------
+
+  post:IPostList = {
+    username: '',
+    postId: '',
+    imageUrl: '',
+    description: '',
+    timeStamp: 0,
+    likesQuantity: 0,
+    commentsQuantity: 0
+  }
+
+  isPostCardOpen = false
+
+  openPostCard(post: IPostList){
+    this.postCardContainer.nativeElement.scrollTop = 0;
+    this.post = post
+    if(post.description.length > 75){
+      this.post.shortDescription = this.truncateDescription(post.description,75)
+    }else{
+      this.post.shortDescription = post.description
+    }
+    
+    this.isPostCardOpen = true
+  }
+
+  closePostCard(){
+    this.isPostCardOpen = false
+  }
 
   private usersService = inject(UsersService);
 
