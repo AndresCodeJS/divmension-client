@@ -6,7 +6,7 @@
       <div class="flex flex-col bg-orange w-full p-5 pb-16 rounded-lg">
         <!-- IMAGEN -->
         <img
-          src="{{ '/sin-perfil.jpg' }}"
+          src="{{ post.imageUrl || '/sin-perfil.jpg' }}"
           alt="Logo"
           class="object-cover shadow-lg rounded-lg"
         />
@@ -31,7 +31,7 @@
                     d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
                   />
                 </svg>
-                <p class="text-gray-heavy">2000</p>
+                <p class="text-gray-heavy">{{ post.likesQuantity }}</p>
               </div>
               <!-- Comentarios -->
               <div class="flex gap-1 ml-3">
@@ -49,26 +49,52 @@
                     d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z"
                   />
                 </svg>
-                <p class="text-gray-heavy">2000</p>
+                <p class="text-gray-heavy">{{ post.commentsQuantity }}</p>
               </div>
             </div>
             <!-- FECHA -->
-            <div class="font-semibold"><p>1min Ago</p></div>
+            <div class="font-medium text-sm">
+              <p>{{ postDate }} Ago</p>
+            </div>
           </div>
 
-          <p class="text-xl font-bold">andres</p>
+          <p class="text-xl font-bold">{{ post.username }}</p>
 
           <!-- DESCRIPCION -->
-          <p class="font-normal text-base mt-3 mb-6">
-            Esta es una descripcion larga esta es una descripcion larga esta es
-            una descripcion larga larga esta es una descripcion larga esta es
-            una descripcion larga larga esta es una descripcion larga esta es
-            una descripcion larga larga esta es una descripcion larga esta es
-            una descripcion larga
-          </p>
+          <div class="flex flex-col text-gray-heavy pt-3 ml-2 w-full">
+            @if(moreDescription){
+            <pre
+              class="text-start whitespace-pre-wrap break-words text-sm font-normal font-sans w-11/12"
+              >{{ post.description }}</pre
+            >
+            <p
+              (click)="showMoreDescription()"
+              class="flex justify-end font-normal text-xs w-11/12  text-gray-hover cursor-pointer"
+            >
+              ... Show less
+            </p>
+            }@else{
+            <pre
+              class="text-start whitespace-pre-wrap break-words text-sm font-normal font-sans w-11/12"
+              >{{ description }}</pre
+            >
+            <span
+              (click)="showMoreDescription()"
+              class="flex justify-end font-normal text-xs w-11/12 text-gray-hover cursor-pointer {{
+                showMoreDescriptionButton ? '' : 'hidden'
+              }}"
+              >... Show more</span
+            >
+            }
+          </div>
+          <!--   <div class="flex text-gray-heavy pt-3 ml-2 max-w-64 h-24">
+            <pre
+              class="text-start whitespace-pre-wrap break-words text-sm font-normal font-sans max-w-60"
+            ><span class="mr-2 font-semibold text-base text-gray-hover {{isProfileView?'hidden':''}}">{{post.username}}</span>{{truncateDescription(post.description,75)}}</pre>
+          </div> -->
         </div>
         <!-- COMENTARIOS -->
-        <div class="flex flex-col w-full items-start">
+        <div class="flex flex-col w-full items-start mt-10">
           <button class="text-sm ml-5">
             <p>Show more comments...</p>
           </button>

@@ -1,6 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { PostsService } from '../../user/data-access/post.service';
+import { IPostList } from '../../shared/interfaces/post.interface';
+import { truncateText } from '../../utils/stringManager';
+import { elapsedTime } from '../../utils/timeManager';
 
 @Component({
   selector: 'app-post-view',
@@ -48,11 +52,54 @@ export default class PostViewComponent implements OnInit {
 
   private subscription: Subscription | undefined;
 
+  postService = inject(PostsService)
+
+  post: IPostList = {
+    description: '',
+    imageUrl: '',
+    username: '',
+    postId: '',
+    timeStamp: 0,
+    likesQuantity: 0,
+    commentsQuantity: 0
+  }
+
+  description: string = ''
+  postDate: string = ''
+
+  showMoreDescriptionButton = false
+  moreDescription = false
+
+  showMoreDescription(){
+    this.moreDescription = !this.moreDescription
+  }
+
   // Cargar los datos al acceder al perfil del usuario -------------------------------------------------
   ngOnInit(): void {
     this.subscription = this.route.paramMap.subscribe((params) => {
       const usernameParam = params.get('username') || '';
       const postIdParam = params.get('postId') || '';
+
+      this.postService.getPostDetails(usernameParam,postIdParam).subscribe({
+        next:(response)=>{
+          console.log(response)
+          this.post = response
+
+          this.description = truncateText(response.description,100)
+          this.postDate = elapsedTime(response.timeStamp)
+
+          if(response.description.length >= 100){
+            this.showMoreDescriptionButton = true
+          }
+
+          this.commentInput.nativeElement.blur();
+
+
+        },
+        error:(error)=>{
+          console.log(error)
+        }
+      })
 
       console.log('hola', usernameParam, postIdParam);
     });

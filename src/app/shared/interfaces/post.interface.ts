@@ -10,5 +10,5 @@ export interface IPostList {
   description: string,
   timeStamp: number
   likesQuantity: number,
-  commentsQuantity: number ,
+  commentsQuantity: number 
   }

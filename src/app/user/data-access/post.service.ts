@@ -38,4 +38,20 @@ export class PostsService extends BaseHttpService {
       `${this.apiUrl}/posts/user/${pkParam}/${skParam}`
     );
   }
+
+  getPostDetails(username:string, postId:string): Observable<any> {
+
+    let authToken = getToken();
+
+    const headers = new HttpHeaders({
+      Authorization: authToken || '',
+      'Content-Type': 'application/json',
+    });
+
+    console.log('se va a llamar a', username, postId)
+
+    return this.http.get<any>(
+      `${this.apiUrl}/posts/details/${username}/${postId}`,{headers}
+    );
+  }
 }
