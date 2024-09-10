@@ -134,6 +134,8 @@ export class LoginFormComponent {
 
           this.store.setUser(response.user)
 
+          window.location.reload();
+
           this.closeFormEventEmitter.emit(true);
         },error: (error: HttpErrorResponse) => {
           if (error.error.type == 'INVALID_USERNAME') {

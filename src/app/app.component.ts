@@ -4,6 +4,7 @@ import { HeaderComponent } from './shared/ui/navbar/header.component';
 import  FloatingButtonComponent  from './shared/ui/floating-button/floating-button.component';
 import { Store } from './store/store';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -11,7 +12,7 @@ import { Store } from './store/store';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent  {
 
   store = inject(Store)
 

@@ -55,6 +55,7 @@ export class DropDownMenuComponent {
     removeToken()
     this.store.removeUser()
     this.closeDropDownMenu = true
+    window.location.reload();
   }
 
 

@@ -14,15 +14,17 @@ import { Subscription } from 'rxjs';
 import { PostsService } from '../../user/data-access/post.service';
 import { IPostList } from '../../shared/interfaces/post.interface';
 import { elapsedTime } from '../../utils/timeManager';
+import { LikeHeartComponent } from "../../shared/ui/like-heart/like-heart.component";
+import { Store } from '../../store/store';
 
 @Component({
   selector: 'app-post-view',
   standalone: true,
-  imports: [],
+  imports: [LikeHeartComponent],
   templateUrl: './post-view.component.html',
   styles: ``,
 })
-export default class PostViewComponent implements OnInit {
+export default class PostViewComponent {
   constructor(
     private route: ActivatedRoute,
     private renderer: Renderer2,
@@ -42,9 +44,10 @@ export default class PostViewComponent implements OnInit {
     timeStamp: 0,
     likesQuantity: 0,
     commentsQuantity: 0,
+    isLiked: false
   };
 
-  postDate = elapsedTime
+  fixedDate = elapsedTime
 
   //FUNCION ACTIVADA AL HACER CLICK FUERA DEL COMPONENTE ------------------------------------
 
@@ -60,6 +63,12 @@ export default class PostViewComponent implements OnInit {
       this.closePostDetailsEmitter.emit(true);
       this.commentInput.nativeElement.innerHTML = '';
     }
+  }
+
+  //CERRAR VENTANA DE DETALLES DEL POST
+  closePostDetails(){
+    this.closePostDetailsEmitter.emit(true);
+    this.commentInput.nativeElement.innerHTML = '';
   }
 
   //Logica usada para el div usado como input text al escribir un comentario en el post -----
@@ -106,35 +115,33 @@ export default class PostViewComponent implements OnInit {
     this.moreDescription = !this.moreDescription;
   }
 
-  // Cargar los datos al acceder al perfil del usuario -------------------------------------------------
-  ngOnInit(): void {
-    
-    /*    this.subscription = this.route.paramMap.subscribe((params) => {
-      const usernameParam = params.get('username') || '';
-      const postIdParam = params.get('postId') || '';
+  // DAR LIKE A POST --------------------------------------------------------
 
-      this.postService.getPostDetails(usernameParam,postIdParam).subscribe({
-        next:(response)=>{
-          console.log(response)
-          this.post = response
+  store = inject(Store)
 
-          this.description = truncateText(response.description,100)
-          this.postDate = elapsedTime(response.timeStamp)
-
-          if(response.description.length >= 100){
-            this.showMoreDescriptionButton = true
-          }
-
-          this.commentInput.nativeElement.blur();
-
-
-        },
-        error:(error)=>{
-          console.log(error)
-        }
-      })
-
-      console.log('hola', usernameParam, postIdParam);
-    }); */
+  like(){
+    this.postService.likePost(this.post.postId).subscribe({
+      next: (response) =>{
+        this.post.isLiked = true
+        
+        this.post.likesQuantity ++;
+      },
+      error: (error)=>{
+        console.log(error)
+      }
+    })
   }
+
+  unLike(){
+    this.postService.unLikePost(this.post.postId).subscribe({
+      next: (response) =>{
+        this.post.isLiked = false
+        this.post.likesQuantity --;
+      },
+      error: (error)=>{
+        console.log(error)
+      }
+    })
+  }
+
 }

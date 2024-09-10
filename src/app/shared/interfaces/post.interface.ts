@@ -11,5 +11,6 @@ export interface IPostList {
   shortDescription?:string,
   timeStamp: number
   likesQuantity: number,
+  isLiked?:boolean,
   commentsQuantity: number 
   }

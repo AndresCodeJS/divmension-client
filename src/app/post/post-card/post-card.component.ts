@@ -4,11 +4,12 @@ import { elapsedTime } from '../../utils/timeManager';
 import { IUserProfile } from '../../shared/interfaces/user.interface';
 import { IPostList } from '../../shared/interfaces/post.interface';
 import { RouterModule } from '@angular/router';
+import { LikeHeartComponent } from "../../shared/ui/like-heart/like-heart.component";
 
 @Component({
   selector: 'app-post-card',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, LikeHeartComponent],
   templateUrl: './post-card.component.html',
   styles: ``
 })

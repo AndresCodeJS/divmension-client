@@ -54,4 +54,35 @@ export class PostsService extends BaseHttpService {
       `${this.apiUrl}/posts/details/${username}/${postId}`,{headers}
     );
   }
+
+  likePost(postId:string): Observable<any> {
+
+    let authToken = getToken();
+
+    const headers = new HttpHeaders({
+      Authorization: authToken || '',
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post<any>(
+      `${this.apiUrl}/posts/like`,{postId},{headers}
+    );
+
+  }
+
+  
+  unLikePost(postId:string): Observable<any> {
+
+    let authToken = getToken();
+
+    const headers = new HttpHeaders({
+      Authorization: authToken || '',
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post<any>(
+      `${this.apiUrl}/posts/unlike`,{postId},{headers}
+    );
+
+  }
 }
