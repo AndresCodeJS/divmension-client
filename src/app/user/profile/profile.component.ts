@@ -18,6 +18,7 @@ import { PostsService } from '../data-access/post.service';
 import { LoadingScreenComponent } from "../../shared/ui/loading-screen/loading-screen.component";
 import PostViewComponent from "../../post/post-view/post-view.component";
 import { IPostList } from '../../shared/interfaces/post.interface';
+import { setToken } from '../data-access/local-storage';
 
 @Component({
   selector: 'app-profile',
@@ -68,7 +69,6 @@ export default class ProfileComponent implements OnInit {
       this.postsService.getPostsByUser(this.user.lastPostKey).subscribe({
         next: (response) => {
           if (response.posts.length) {
-            /* console.log('respuesta paginacion', response) */
             let concatArray = this.user.posts.concat(response.posts);
             this.user.posts = concatArray;
             this.user.lastPostKey = response.lastEvaluatedKey;
@@ -114,6 +114,7 @@ export default class ProfileComponent implements OnInit {
   }
 
   isPostCardOpen = false
+  showCommentsButton = false
 
   openPostCard(post: IPostList){
     this.postCardContainer.nativeElement.scrollTop = 0;
@@ -123,12 +124,17 @@ export default class ProfileComponent implements OnInit {
     }else{
       this.post.shortDescription = post.description
     }
+
+    if(post.commentsQuantity>0){
+      this.showCommentsButton = true
+    }
     
     this.isPostCardOpen = true
   }
 
   closePostCard(){
     this.isPostCardOpen = false
+    this.showCommentsButton = false
   }
 
   private usersService = inject(UsersService);
@@ -218,6 +224,8 @@ export default class ProfileComponent implements OnInit {
           this.usersService.updateProfilePhoto(url).subscribe({
             next: (response) => {
               console.log(response);
+              setToken(response.jwt)
+              this.store.setPhoto(url)
               this.user.photoUrl = url;
               this.isLoadingPhoto = false;
             },

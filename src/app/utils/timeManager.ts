@@ -11,7 +11,7 @@ export function elapsedTime(unixTimestamp:number) {
   const minutes = Math.floor(diff / (1000 * 60));
   if(minutes>=1) return `${minutes}min`
   const seconds = Math.floor(diff / 1000);
-  if(seconds>=1) return `${seconds}s`
+  if(seconds>=0) return `${seconds}s`
 
   return ''
     

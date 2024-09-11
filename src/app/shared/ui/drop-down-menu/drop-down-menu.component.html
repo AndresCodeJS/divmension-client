@@ -31,11 +31,18 @@
     <div class="mt-3">
       <p class="font-medium text-gray-heavy">{{ store.user().username }}</p>
     </div>
+  <!--   <div class="flex justify-center items-start w-3/12 sm:w-2/12">
+      <img
+        [src]="item.imageUrl || '/sin-perfil.jpg'"
+        alt="Photo"
+        class="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover shadow-lg"
+      />
+    </div> -->
     <button (click)="onClickMenu()" class="sm:ml-2">
       <img
         [src]="store.user().photoUrl || '/sin-perfil.jpg'"
         alt="Profile"
-        class="w-8 sm:w-12 h-auto rounded-full"
+        class="w-8 h-8 sm:w-12 sm:h-12  rounded-full object-cover" 
       />
     </button>
   </div>

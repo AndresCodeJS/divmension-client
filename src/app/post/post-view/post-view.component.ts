@@ -12,15 +12,22 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PostsService } from '../../user/data-access/post.service';
-import { IPostList } from '../../shared/interfaces/post.interface';
-import { elapsedTime } from '../../utils/timeManager';
-import { LikeHeartComponent } from "../../shared/ui/like-heart/like-heart.component";
+import {
+  IComment,
+  IPostList,
+  IlastCommentKey,
+} from '../../shared/interfaces/post.interface';
+
+import { LikeHeartComponent } from '../../shared/ui/like-heart/like-heart.component';
 import { Store } from '../../store/store';
+import { LoadingSpinnerComponent } from '../../shared/ui/loading-spinner/loading-spinner.component';
+import { elapsedTime } from '../../utils/timeManager';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-post-view',
   standalone: true,
-  imports: [LikeHeartComponent],
+  imports: [LikeHeartComponent, LoadingSpinnerComponent],
   templateUrl: './post-view.component.html',
   styles: ``,
 })
@@ -28,7 +35,7 @@ export default class PostViewComponent {
   constructor(
     private route: ActivatedRoute,
     private renderer: Renderer2,
-    private el: ElementRef,
+    private el: ElementRef
   ) {
     // Listener global para clics fuera del componente
     this.renderer.listen('document', 'click', (event: Event) => {
@@ -44,37 +51,45 @@ export default class PostViewComponent {
     timeStamp: 0,
     likesQuantity: 0,
     commentsQuantity: 0,
-    isLiked: false
+    isLiked: false,
   };
 
-  fixedDate = elapsedTime
+  fixedDate = elapsedTime;
 
   //FUNCION ACTIVADA AL HACER CLICK FUERA DEL COMPONENTE ------------------------------------
 
   @Output() closePostDetailsEmitter = new EventEmitter<boolean>();
 
-  @Input() isPostCardOpen= false; // solo cuando la tarjeta esta abierta se puede cerrar
+  @Input() isPostCardOpen = false; // solo cuando la tarjeta esta abierta se puede cerrar
 
   onDocumentClick(event: Event) {
     //Devuelve false si el click se produce fuera de este componente
     const clickedInside = this.el.nativeElement.contains(event.target);
     if (!clickedInside && this.isPostCardOpen) {
-      console.log('click fuera del card')
+      console.log('click fuera del card');
       this.closePostDetailsEmitter.emit(true);
       this.commentInput.nativeElement.innerHTML = '';
+      this.content = '';
+      this.errorLength = false;
+      this.comments = []
+      this.lastCommentKey = {
+        pk: '',
+        sk: 'none',
+      };
     }
   }
 
   //CERRAR VENTANA DE DETALLES DEL POST
-  closePostDetails(){
+  closePostDetails() {
     this.closePostDetailsEmitter.emit(true);
     this.commentInput.nativeElement.innerHTML = '';
   }
 
+  //COMENTARIOS ----------------------------------------------------------
+
   //Logica usada para el div usado como input text al escribir un comentario en el post -----
   @ViewChild('commentInput') commentInput!: ElementRef;
   content: string = '';
-  comments: string[] = [];
 
   ngAfterViewInit() {
     this.focusInput();
@@ -85,6 +100,7 @@ export default class PostViewComponent {
   }
 
   onKeyDown(event: KeyboardEvent) {
+    this.errorLength = false;
     if (event.key == 'Enter') {
       event.preventDefault();
       this.postComment();
@@ -93,14 +109,96 @@ export default class PostViewComponent {
     }
   }
 
+  errorLength = false;
+  loadingPostComment = false;
+
+  store = inject(Store);
+
+  //PUBLICAR EL COMENTARIO
   postComment() {
     console.log(this.content);
-    this.commentInput.nativeElement.innerHTML = '';
-    this.commentInput.nativeElement.blur();
+    if (this.content.length > 100) {
+      this.errorLength = true;
+      return;
+    }
+
+    this.loadingPostComment = true;
+
+    this.postService.postComment(this.post.postId, this.content).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.post.commentsQuantity++;
+
+        let store = this.store.user();
+
+        this.comments.unshift({
+          commentId: uuidv4(),
+          user: store.username,
+          imageUrl: store.photoUrl,
+          content: this.content,
+          timeStamp: response.currentTimestamp,
+        });
+
+        console.log(this.comments);
+
+        this.content = '';
+        this.commentInput.nativeElement.innerHTML = '';
+        this.commentInput.nativeElement.blur();
+        this.loadingPostComment = false;
+      },
+      error: (error) => {
+        console.log(error);
+        this.loadingPostComment = false;
+      },
+    });
   }
 
   focusInput() {
     this.commentInput.nativeElement.focus();
+  }
+
+  // MOSTRAR LOS COMENTARIOS -----------------------------------------------------
+
+  @Input() showCommentsButton = false;
+
+  loadingComments = false
+
+  lastCommentKey: IlastCommentKey = {
+    pk: '',
+    sk: 'none',
+  };
+
+  comments: IComment[] = [];
+
+  showComments() {
+    this.loadingComments = true
+    this.postService
+      .getComments(this.post.postId, this.lastCommentKey)
+      .subscribe({
+        next: (response) => {
+          if (response.lastEvaluatedKey) {
+            this.lastCommentKey = response.lastEvaluatedKey
+            
+          } else {
+            this.lastCommentKey = {
+              pk: '',
+              sk: 'none',
+            };
+          }
+          if(response.comments.length){
+            this.comments = this.comments.concat(response.comments)
+          }
+
+          console.log('respuesta comments', response)
+
+          this.showCommentsButton = false;
+          this.loadingComments = false
+        },
+        error: (error) => {
+          console.log(error);
+          this.loadingComments = false
+        },
+      });
   }
 
   // ----------------------------------------------------------------------------------
@@ -117,31 +215,28 @@ export default class PostViewComponent {
 
   // DAR LIKE A POST --------------------------------------------------------
 
-  store = inject(Store)
-
-  like(){
+  like() {
     this.postService.likePost(this.post.postId).subscribe({
-      next: (response) =>{
-        this.post.isLiked = true
-        
-        this.post.likesQuantity ++;
+      next: (response) => {
+        this.post.isLiked = true;
+
+        this.post.likesQuantity++;
       },
-      error: (error)=>{
-        console.log(error)
-      }
-    })
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
 
-  unLike(){
+  unLike() {
     this.postService.unLikePost(this.post.postId).subscribe({
-      next: (response) =>{
-        this.post.isLiked = false
-        this.post.likesQuantity --;
+      next: (response) => {
+        this.post.isLiked = false;
+        this.post.likesQuantity--;
       },
-      error: (error)=>{
-        console.log(error)
-      }
-    })
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
-
 }

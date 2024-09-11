@@ -132,6 +132,8 @@ export class LoginFormComponent {
             setToken(response.jwt);
           }
 
+          console.log('se va a guardar', response.user)
+
           this.store.setUser(response.user)
 
           window.location.reload();

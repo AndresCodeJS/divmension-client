@@ -33,8 +33,11 @@ export const Store = signalStore(
   withMethods(({ user, isLoading, ...store }) => {
     return {
       setUser(user: IUserStore) {
-        console.log('se guardara: ' + user.username);
+        console.log('se guardara: ', user);
         patchState(store, { user });
+      },
+      setPhoto(url:string) {
+        patchState(store, {  user:{...user(), photoUrl:url} });
       },
       removeUser() {
         patchState(store, {

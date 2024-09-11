@@ -8,7 +8,7 @@ import {
 import { Observable } from 'rxjs';
 import { HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { getToken } from './local-storage';
-import { IPost } from '../../shared/interfaces/post.interface';
+import { IlastCommentKey, IPost } from '../../shared/interfaces/post.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -82,6 +82,32 @@ export class PostsService extends BaseHttpService {
 
     return this.http.post<any>(
       `${this.apiUrl}/posts/unlike`,{postId},{headers}
+    );
+
+  }
+
+  postComment(postId:string, content:string): Observable<any> {
+
+    let authToken = getToken();
+
+    const headers = new HttpHeaders({
+      Authorization: authToken || '',
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post<any>(
+      `${this.apiUrl}/posts/comment`,{postId, content},{headers}
+    );
+
+  }
+
+  getComments(postId:string, lastCommentKey:IlastCommentKey): Observable<any> {
+
+    console.log(postId)
+    console.log(lastCommentKey.sk)
+
+    return this.http.get<any>(
+      `${this.apiUrl}/posts/comments-list/${postId}/${lastCommentKey.sk}`
     );
 
   }

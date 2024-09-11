@@ -14,3 +14,16 @@ export interface IPostList {
   isLiked?:boolean,
   commentsQuantity: number 
   }
+
+  export interface IComment {
+    commentId:string,
+    user: string,
+    imageUrl: string,
+    content: string,
+    timeStamp: number
+  }
+
+  export interface IlastCommentKey{
+    pk: string,
+    sk:string
+  }
