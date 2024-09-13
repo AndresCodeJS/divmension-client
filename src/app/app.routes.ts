@@ -11,5 +11,10 @@ export const routes: Routes = [
         loadChildren: () => import('./post/post-shell/post.route')
 
     },
+    {
+        path: '',
+        loadChildren: () => import('./home/home-shell/home.route')
+
+    },
 
 ];
