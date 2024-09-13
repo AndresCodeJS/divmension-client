@@ -66,7 +66,6 @@ export default class PostViewComponent {
     //Devuelve false si el click se produce fuera de este componente
     const clickedInside = this.el.nativeElement.contains(event.target);
     if (!clickedInside && this.isPostCardOpen) {
-      console.log('click fuera del card');
       this.closePostDetailsEmitter.emit(true);
       this.commentInput.nativeElement.innerHTML = '';
       this.content = '';
@@ -116,7 +115,6 @@ export default class PostViewComponent {
 
   //PUBLICAR EL COMENTARIO
   postComment() {
-    console.log(this.content);
     if (this.content.length > 100) {
       this.errorLength = true;
       return;
@@ -138,8 +136,6 @@ export default class PostViewComponent {
           content: this.content,
           timeStamp: response.currentTimestamp,
         });
-
-        console.log(this.comments);
 
         this.content = '';
         this.commentInput.nativeElement.innerHTML = '';
@@ -188,8 +184,6 @@ export default class PostViewComponent {
           if(response.comments.length){
             this.comments = this.comments.concat(response.comments)
           }
-
-          console.log('respuesta comments', response)
 
           this.showCommentsButton = false;
           this.loadingComments = false

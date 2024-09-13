@@ -69,6 +69,7 @@ export default class ProfileComponent implements OnInit {
       this.postsService.getPostsByUser(this.user.lastPostKey).subscribe({
         next: (response) => {
           if (response.posts.length) {
+            console.log('responde, ', response.posts)
             let concatArray = this.user.posts.concat(response.posts);
             this.user.posts = concatArray;
             this.user.lastPostKey = response.lastEvaluatedKey;

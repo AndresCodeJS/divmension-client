@@ -22,20 +22,24 @@ export class PostsService extends BaseHttpService {
       'Content-Type': 'application/json',
     });
 
-    console.log('se estan enviando', post);
-
     return this.http.post<any>(`${this.apiUrl}/posts/create`, post, {
       headers,
     });
   }
   getPostsByUser(lastPostKey: any): Observable<any> {
 
-    console.log('se hara el llamado con, ',lastPostKey)
+    let authToken = getToken();
+
+    const headers = new HttpHeaders({
+      Authorization: authToken || '',
+      'Content-Type': 'application/json',
+    });
+
     let pkParam = lastPostKey.pk.split('#')[0] // -> obtiene el username
     let skParam = lastPostKey.sk;
 
     return this.http.get<any>(
-      `${this.apiUrl}/posts/user/${pkParam}/${skParam}`
+      `${this.apiUrl}/posts/user/${pkParam}/${skParam}`, {headers}
     );
   }
 
