@@ -23,7 +23,7 @@ export interface IPostList {
     timeStamp: number
   }
 
-  export interface IlastCommentKey{
+  export interface LastEvaluatedKey{
     pk: string,
     sk:string
   }

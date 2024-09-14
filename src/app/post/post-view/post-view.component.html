@@ -62,7 +62,7 @@
             </div>
             <!-- Comentarios -->
             <div
-              (click)="showComments()"
+              (click)="onCommentIcon()"
               class="flex gap-1 ml-3 cursor-pointer"
             >
               <svg
@@ -88,7 +88,9 @@
           </div>
         </div>
 
-        <p class="text-xl font-bold">{{ post.username }}</p>
+        <p 
+        [routerLink]="['/user/profile', post.username]"
+        class="text-xl font-bold cursor-pointer">{{ post.username }}</p>
 
         <!-- DESCRIPCION -->
         <div class="flex flex-col text-gray-heavy pt-3 w-full">

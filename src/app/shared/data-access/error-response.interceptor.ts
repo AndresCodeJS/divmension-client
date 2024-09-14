@@ -28,5 +28,5 @@ function handleErrorResponse(error: HttpErrorResponse, router: Router) {
     return throwError(() => error.error.message);
   }
 
-  return throwError(() => error.error.message);
+  return throwError(() => error);
 }

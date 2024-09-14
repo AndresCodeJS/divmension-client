@@ -9,13 +9,13 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PostsService } from '../../user/data-access/post.service';
 import {
   IComment,
   IPostList,
-  IlastCommentKey,
+  LastEvaluatedKey,
 } from '../../shared/interfaces/post.interface';
 
 import { LikeHeartComponent } from '../../shared/ui/like-heart/like-heart.component';
@@ -27,7 +27,7 @@ import { v4 as uuidv4 } from 'uuid';
 @Component({
   selector: 'app-post-view',
   standalone: true,
-  imports: [LikeHeartComponent, LoadingSpinnerComponent],
+  imports: [LikeHeartComponent, LoadingSpinnerComponent, RouterLink],
   templateUrl: './post-view.component.html',
   styles: ``,
 })
@@ -64,17 +64,20 @@ export default class PostViewComponent {
 
   onDocumentClick(event: Event) {
     //Devuelve false si el click se produce fuera de este componente
-    const clickedInside = this.el.nativeElement.contains(event.target);
+    const clickedInside = this.el.nativeElement?.contains(event.target);
     if (!clickedInside && this.isPostCardOpen) {
       this.closePostDetailsEmitter.emit(true);
-      this.commentInput.nativeElement.innerHTML = '';
+      if (this.store.user().username) {
+        this.commentInput.nativeElement.innerHTML = '';
+      }
       this.content = '';
       this.errorLength = false;
-      this.comments = []
+      this.comments = [];
       this.lastCommentKey = {
         pk: '',
         sk: 'none',
       };
+      this.isClicked = false;
     }
   }
 
@@ -129,8 +132,10 @@ export default class PostViewComponent {
 
         let store = this.store.user();
 
+        console.log('respuesta luego del comentario',response)
+
         this.comments.unshift({
-          commentId: uuidv4(),
+          commentId: response.commentId,
           user: store.username,
           imageUrl: store.photoUrl,
           content: this.content,
@@ -150,47 +155,58 @@ export default class PostViewComponent {
   }
 
   focusInput() {
-    this.commentInput.nativeElement.focus();
+    if (this.store.user().username) {
+      this.commentInput.nativeElement.focus();
+    }
   }
 
   // MOSTRAR LOS COMENTARIOS -----------------------------------------------------
 
   @Input() showCommentsButton = false;
 
-  loadingComments = false
+  loadingComments = false;
 
-  lastCommentKey: IlastCommentKey = {
+  lastCommentKey: LastEvaluatedKey = {
     pk: '',
     sk: 'none',
   };
 
   comments: IComment[] = [];
 
+  isClicked = false;
+
+  onCommentIcon() {
+    //Usada para cargar los comentarios iniciales al hacer click en el icono
+    if (!this.isClicked) {
+      this.showComments();
+      this.isClicked = true;
+    }
+  }
+
   showComments() {
-    this.loadingComments = true
+    this.loadingComments = true;
     this.postService
       .getComments(this.post.postId, this.lastCommentKey)
       .subscribe({
         next: (response) => {
           if (response.lastEvaluatedKey) {
-            this.lastCommentKey = response.lastEvaluatedKey
-            
+            this.lastCommentKey = response.lastEvaluatedKey;
           } else {
             this.lastCommentKey = {
               pk: '',
               sk: 'none',
             };
           }
-          if(response.comments.length){
-            this.comments = this.comments.concat(response.comments)
+          if (response.comments.length) {
+            this.comments = this.comments.concat(response.comments);
           }
 
           this.showCommentsButton = false;
-          this.loadingComments = false
+          this.loadingComments = false;
         },
         error: (error) => {
           console.log(error);
-          this.loadingComments = false
+          this.loadingComments = false;
         },
       });
   }
