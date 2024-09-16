@@ -12,7 +12,8 @@ export interface IPostList {
   timeStamp: number
   likesQuantity: number,
   isLiked?:boolean,
-  commentsQuantity: number 
+  commentsQuantity: number ,
+  initialCommentsQuantity?: number //usado para aplicar en logica para mostrar comentarios
   }
 
   export interface IComment {

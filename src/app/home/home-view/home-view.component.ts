@@ -5,11 +5,12 @@ import {
   LastEvaluatedKey,
 } from '../../shared/interfaces/post.interface';
 import { PostCardComponent } from '../../post/post-card/post-card.component';
+import { LoadingScreenComponent } from "../../shared/ui/loading-screen/loading-screen.component";
 
 @Component({
   selector: 'app-home-view',
   standalone: true,
-  imports: [PostCardComponent],
+  imports: [PostCardComponent, LoadingScreenComponent],
   templateUrl: './home-view.component.html',
   styles: ``,
 })
@@ -76,7 +77,37 @@ export default class HomeViewComponent implements OnInit {
       //Variable usada para no ejecutar la consulta mas de una vez
       this.queryExecuted = true;
 
-      //Obtiene los siguientes posts al paginar haciendo scroll hacia abajo
+      //Obtiene los siguientes posts al paginar haciendo scroll hacia EL FINAL DE LA PAGINA
+      this.postService.getAllPosts(this.lastEvaluatedKey).subscribe({
+        next: (response) => {
+          console.log('responde, ', response.posts)
+  
+          if (response.posts.length) {
+            let concatArray = this.posts.concat(response.posts);
+            this.posts = concatArray;
+          }
+         
+          if (response.lastEvaluatedKey) {
+            console.log('Entra en asignacion')
+            this.lastEvaluatedKey = response.lastEvaluatedKey;
+          }else{
+            this.lastEvaluatedKey = {
+              pk: 'none',
+              sk: 'none',
+            };
+          }
+
+          this.loadingScreen = false;
+          this.queryExecuted = false;
+        },
+        error: (error) => {
+          console.log(error);
+          this.loadingScreen = false;
+          this.queryExecuted = false;
+        },
+      });
+
+
 /*       this.postsService.getPostsByUser(this.user.lastPostKey).subscribe({
         next: (response) => {
           if (response.posts.length) {

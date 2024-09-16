@@ -4,7 +4,6 @@ import {
   EventEmitter,
   inject,
   Input,
-  OnInit,
   Output,
   Renderer2,
   ViewChild,
@@ -22,7 +21,6 @@ import { LikeHeartComponent } from '../../shared/ui/like-heart/like-heart.compon
 import { Store } from '../../store/store';
 import { LoadingSpinnerComponent } from '../../shared/ui/loading-spinner/loading-spinner.component';
 import { elapsedTime } from '../../utils/timeManager';
-import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-post-view',
@@ -52,6 +50,7 @@ export default class PostViewComponent {
     likesQuantity: 0,
     commentsQuantity: 0,
     isLiked: false,
+    initialCommentsQuantity: 0
   };
 
   fixedDate = elapsedTime;
@@ -70,6 +69,7 @@ export default class PostViewComponent {
       if (this.store.user().username) {
         this.commentInput.nativeElement.innerHTML = '';
       }
+      this.queriedComments = false
       this.content = '';
       this.errorLength = false;
       this.comments = [];
@@ -98,7 +98,7 @@ export default class PostViewComponent {
   }
 
   onInput() {
-    this.content = this.commentInput.nativeElement.innerHTML;
+    this.content = this.commentInput.nativeElement.textContent;
   }
 
   onKeyDown(event: KeyboardEvent) {
@@ -106,7 +106,6 @@ export default class PostViewComponent {
     if (event.key == 'Enter') {
       event.preventDefault();
       this.postComment();
-      /* console.log(this.content); */
       this.commentInput.nativeElement.innerHTML = '';
     }
   }
@@ -117,6 +116,10 @@ export default class PostViewComponent {
   store = inject(Store);
 
   //PUBLICAR EL COMENTARIO
+
+  /* commentsPosted: IComment[] = [];  */
+  queriedComments = false
+
   postComment() {
     if (this.content.length > 100) {
       this.errorLength = true;
@@ -127,21 +130,34 @@ export default class PostViewComponent {
 
     this.postService.postComment(this.post.postId, this.content).subscribe({
       next: (response) => {
-        console.log(response);
+
         this.post.commentsQuantity++;
 
         let store = this.store.user();
 
-        console.log('respuesta luego del comentario',response)
-
-        this.comments.unshift({
+        const comment = {
           commentId: response.commentId,
           user: store.username,
           imageUrl: store.photoUrl,
           content: this.content,
           timeStamp: response.currentTimestamp,
-        });
+        }
 
+        //Se agrega a la lista de comentarios mostrada
+        this.comments.unshift(comment);
+
+        //Se verifica que no se haya consultado por los comentarios y que existan mas posts en la BD y asi activar el boton de mostrar mas comentarios
+        //
+        if(!this.queriedComments && this.post.initialCommentsQuantity! > 0){
+          this.lastCommentKey = {
+            pk: `${this.post.postId}#comment`,
+            sk: response.commentId
+          }
+        }
+
+        //Comentarios recien posteados que se agregan al array para evitar  mostrar duplicados cuando se obtienen de la base de datos
+        /* this.commentsPosted.push(comment) */
+        
         this.content = '';
         this.commentInput.nativeElement.innerHTML = '';
         this.commentInput.nativeElement.blur();
@@ -203,6 +219,7 @@ export default class PostViewComponent {
 
           this.showCommentsButton = false;
           this.loadingComments = false;
+          this.queriedComments = true
         },
         error: (error) => {
           console.log(error);

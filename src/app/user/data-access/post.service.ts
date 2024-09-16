@@ -60,9 +60,11 @@ export class PostsService extends BaseHttpService {
 
     //Usado para paginacion
     if (lastPostKey) {
-      lastUsername = lastPostKey.pk.split('#')[0]; // -> obtiene el username
-      lastPostId = lastPostKey.sk;
+      lastUsername = lastPostKey.sk.split('#')[1]; // -> obtiene el username
+      lastPostId = lastPostKey.sk.split('#')[0];
     }
+
+    console.log('llamada con:',lastUsername,lastPostId )
 
     return this.http.get<any>(
       `${this.apiUrl}/posts/all/${lastUsername}/${lastPostId}`,

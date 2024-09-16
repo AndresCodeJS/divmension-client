@@ -111,7 +111,8 @@ export default class ProfileComponent implements OnInit {
     description: '',
     timeStamp: 0,
     likesQuantity: 0,
-    commentsQuantity: 0
+    commentsQuantity: 0,
+    initialCommentsQuantity:0
   }
 
   isPostCardOpen = false
@@ -120,6 +121,7 @@ export default class ProfileComponent implements OnInit {
   openPostCard(post: IPostList){
     this.postCardContainer.nativeElement.scrollTop = 0;
     this.post = post
+    this.post.initialCommentsQuantity = post.commentsQuantity // usado para aplicar logica al mostrar comentarios
     if(post.description.length > 75){
       this.post.shortDescription = this.truncateDescription(post.description,75)
     }else{
