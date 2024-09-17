@@ -65,6 +65,7 @@ export default class PostViewComponent {
     //Devuelve false si el click se produce fuera de este componente
     const clickedInside = this.el.nativeElement?.contains(event.target);
     if (!clickedInside && this.isPostCardOpen) {
+      console.log('se hizo click fuera de post view')
       this.closePostDetailsEmitter.emit(true);
       if (this.store.user().username) {
         this.commentInput.nativeElement.innerHTML = '';
@@ -97,8 +98,23 @@ export default class PostViewComponent {
     this.focusInput();
   }
 
+  lastContent = ''
+
   onInput() {
+/*     let text = this.commentInput.nativeElement.textContent
+    let substring = text.slice(0,text.length-1)
+    console.log(substring)
+    //si el contenido es mayor a 100 evita agregar mas caracter
+    if(text.length > 100){
+
+      this.commentInput.nativeElement.innerHTML = this.lastContent 
+    }else{
+      this.content = this.commentInput.nativeElement.textContent;
+      this.lastContent = this.commentInput.nativeElement.innerHTML
+    } */
+
     this.content = this.commentInput.nativeElement.textContent;
+    
   }
 
   onKeyDown(event: KeyboardEvent) {
@@ -193,7 +209,7 @@ export default class PostViewComponent {
 
   onCommentIcon() {
     //Usada para cargar los comentarios iniciales al hacer click en el icono
-    if (!this.isClicked) {
+    if (!this.isClicked && this.post.initialCommentsQuantity! > 0) {
       this.showComments();
       this.isClicked = true;
     }

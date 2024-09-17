@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { PostsService } from '../../user/data-access/post.service';
 import {
   IPostList,
@@ -6,11 +6,13 @@ import {
 } from '../../shared/interfaces/post.interface';
 import { PostCardComponent } from '../../post/post-card/post-card.component';
 import { LoadingScreenComponent } from "../../shared/ui/loading-screen/loading-screen.component";
+import PostViewComponent from "../../post/post-view/post-view.component";
+import { truncateText as truncateDescription } from '../../utils/stringManager';
 
 @Component({
   selector: 'app-home-view',
   standalone: true,
-  imports: [PostCardComponent, LoadingScreenComponent],
+  imports: [PostCardComponent, LoadingScreenComponent, PostViewComponent],
   templateUrl: './home-view.component.html',
   styles: ``,
 })
@@ -26,7 +28,50 @@ export default class HomeViewComponent implements OnInit {
     sk: 'none',
   };
 
-  openPostCard(post: IPostList) {}
+  // ABRIR/CERRAR POST -----------------------------------------
+
+  @ViewChild('postCardContainer') postCardContainer!: ElementRef;
+
+  post:IPostList = {
+    username: '',
+    postId: '',
+    imageUrl: '',
+    description: '',
+    timeStamp: 0,
+    likesQuantity: 0,
+    commentsQuantity: 0,
+    initialCommentsQuantity:0
+  }
+
+  isPostCardOpen = false
+  showCommentsButton = false
+
+  //Para ver los detalles del post en una ventana flotante
+  openPostCard(post: IPostList) {
+
+    this.postCardContainer.nativeElement.scrollTop = 0;
+    this.post = post
+    this.post.initialCommentsQuantity = post.commentsQuantity // usado para aplicar logica al mostrar comentarios
+    if(post.description.length > 75){
+      this.post.shortDescription = truncateDescription(post.description,75)
+    }else{
+      this.post.shortDescription = post.description
+    }
+
+    if(post.commentsQuantity>0){
+      this.showCommentsButton = true
+    }
+    
+    this.isPostCardOpen = true
+
+  }
+
+  closePostCard(){
+    this.isPostCardOpen = false
+    this.showCommentsButton = false
+  }
+
+  //----------------------------------------------------------------------------------
 
   posts: IPostList[] = [];
 
@@ -99,11 +144,13 @@ export default class HomeViewComponent implements OnInit {
 
           this.loadingScreen = false;
           this.queryExecuted = false;
+          this.loadingPosts = false;
         },
         error: (error) => {
           console.log(error);
           this.loadingScreen = false;
           this.queryExecuted = false;
+          this.loadingPosts = false;
         },
       });
 
