@@ -9,22 +9,10 @@ import { filter} from 'rxjs';
   templateUrl: './floating-button.component.html',
   styles: ``,
 })
-export default class FloatingButtonComponent implements OnInit {
+export default class FloatingButtonComponent{
   constructor(private route: Router) {
    
   }
 
- 
 
-
-  ngOnInit(): void {
-
-  /*    this.route.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: any) => {
-      console.log('hola')
-    }); */
-    
-  }
- 
 }

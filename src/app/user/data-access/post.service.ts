@@ -64,8 +64,6 @@ export class PostsService extends BaseHttpService {
       lastPostId = lastPostKey.sk.split('#')[0];
     }
 
-    console.log('llamada con:',lastUsername,lastPostId )
-
     return this.http.get<any>(
       `${this.apiUrl}/posts/all/${lastUsername}/${lastPostId}`,
       { headers }

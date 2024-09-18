@@ -34,7 +34,6 @@ export class SearchBarDropDownComponent {
 
   //Se ejecuta cuando se selecciona una opcion
   onClickSearchResult(){
-    console.log('se selecciono una opcion')
     this.closeSearchBarEmitter.emit(true)
   }
 
@@ -42,7 +41,6 @@ export class SearchBarDropDownComponent {
   onDocumentClick(event: Event) {
     const clickedInside = this.el.nativeElement.contains(event.target);
     if (!clickedInside) {
-      console.log('click fuera de la lista')
       this.closeSearchBarEmitter.emit(false)
     }
   }

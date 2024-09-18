@@ -60,9 +60,9 @@
 ></div>
  <div
 #postCardContainer
- class="fixed flex top-0 left-0 justify-center h-dvh w-full transition ease-in-out duration-500 overflow-y-auto {{
+ class="fixed flex top-0 mt-5 pb-24 left-0 justify-center h-dvh w-full transition ease-in-out duration-500 overflow-y-auto {{
   !isPostCardOpen? 'opacity-0 invisible' : 'opacity-1 visible'
 }}"
 >
-  <app-post-view class="flex mx-5 w-11/12 sm:w-9/12 md:w-10/12 lg:w-6/12" (closePostDetailsEmitter)="closePostCard()" [isPostCardOpen]="isPostCardOpen" [post]="post" [showCommentsButton]="showCommentsButton"/>  
+  <app-post-view class="flex mx-5 w-11/12 sm:w-9/12 md:w-10/12 lg:w-6/12 " (closePostDetailsEmitter)="closePostCard()" [isPostCardOpen]="isPostCardOpen" [post]="post" [showCommentsButton]="showCommentsButton"/>  
 </div>

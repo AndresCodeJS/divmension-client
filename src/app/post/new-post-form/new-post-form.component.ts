@@ -133,7 +133,6 @@ export default class NewPostFormComponent implements OnInit, OnDestroy {
       this.s3Uploader
         .uploadFile(resizedFile, this.post)
         .then((imageUrl) => {
-          console.log('la url es', imageUrl);
 
           //Registro del post en la base de datos
           this.postService
@@ -143,7 +142,6 @@ export default class NewPostFormComponent implements OnInit, OnDestroy {
             })
             .subscribe({
               next: (response) => {
-                console.log(response);
                 this.form.reset()
                 this.isLoading = false
                 this.router.navigate([
@@ -165,12 +163,10 @@ export default class NewPostFormComponent implements OnInit, OnDestroy {
 
   async onSubmit() {
     if (!this.form.invalid) {
-      console.log(this.form.getRawValue());
-      console.log(this.selectedFile);
       if (this.selectedFile) {
         await this.uploadFile(this.selectedFile);
       } else {
-        console.log('no se encontro');
+        console.log('no se encontro el archivo');
       }
     }
   }

@@ -27,11 +27,6 @@ import { UsersService } from '../../../user/data-access/users.service';
   providers: [UsersService],
 })
 export class HeaderComponent {
-  constructor() {
-    effect(() => {
-      console.log('se ejecuta effect');
-    });
-  }
 
   //Evento abrir/cerrar formulario de registro ---------------------------------------------------------
 
@@ -147,8 +142,6 @@ export class HeaderComponent {
 
       let fixedString = cleanString.trim().replace(/\s+/g, '.'); //reemplaza espacios por puntos
 
-      console.log(`Realizando busqueda por ${fixedString}`);
-
       //cierra la lista cuando se borra y no queda nada escrito
       if (!fixedString) {
         this.closeSearchList = true;
@@ -160,10 +153,8 @@ export class HeaderComponent {
 
           this.usersService.getUserList(fixedString).subscribe({
             next: (response) => {
-              console.log('responde' + JSON.stringify(response.users));
               if (response.users.length) {
                 this.userList = response.users;
-                console.log(response.users)
               }else{
                 this.notFound = true
               }

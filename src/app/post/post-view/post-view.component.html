@@ -1,6 +1,6 @@
-<div class="flex w-full rounded-lg ">
+<div class="flex w-full rounded-lg  pb-20 ">
   <!-- IMAGEN, DESCRIPCION Y FECHA DEL POST DEL POST -->
-  <div class="flex flex-col justify-between w-full">
+  <div class="flex flex-col justify-between w-full ">
     <div class="relative flex flex-col bg-gray-light p-1 pb-16 rounded-lg">
       <!--  BOTTON RETROCEDER -->
       <button
@@ -23,11 +23,13 @@
         </svg>
       </button>
       <!-- IMAGEN -->
+      <div class="aspect-square w-full overflow-hidden rounded-t-lg">
       <img
         src="{{ post.imageUrl || '/sin-perfil.jpg' }}"
         alt="Logo"
-        class="object-cover shadow-lg rounded-t-lg"
+        class="object-cover w-full h-full shadow-lg"
       />
+      </div>
 
       <div class="flex flex-col text-gray-heavy mt-5 px-4 sm:px-10 pb-10">
         <!-- ESTADISTICAS -->

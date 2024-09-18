@@ -81,21 +81,18 @@ export default class HomeViewComponent implements OnInit {
     //CARGA INICIAL POSTS
     this.postService.getAllPosts().subscribe({
       next: (response) => {
-        console.log(response);
 
         if (response.posts.length) {
           this.posts = response.posts;
         }
        
         if (response.lastEvaluatedKey) {
-          console.log('Entra en asignacion')
           this.lastEvaluatedKey = response.lastEvaluatedKey;
         }
 
         this.loadingScreen = false;
       },
       error: (error) => {
-        console.log(error);
         this.loadingScreen = false;
       },
     });
@@ -115,7 +112,6 @@ export default class HomeViewComponent implements OnInit {
       
 
     if (atBottom && !this.queryExecuted && this.lastEvaluatedKey.pk != 'none') {
-      console.log('Llegaste al final del contenedor');
 
       this.loadingPosts = true;
 
@@ -125,7 +121,6 @@ export default class HomeViewComponent implements OnInit {
       //Obtiene los siguientes posts al paginar haciendo scroll hacia EL FINAL DE LA PAGINA
       this.postService.getAllPosts(this.lastEvaluatedKey).subscribe({
         next: (response) => {
-          console.log('responde, ', response.posts)
   
           if (response.posts.length) {
             let concatArray = this.posts.concat(response.posts);
@@ -133,7 +128,6 @@ export default class HomeViewComponent implements OnInit {
           }
          
           if (response.lastEvaluatedKey) {
-            console.log('Entra en asignacion')
             this.lastEvaluatedKey = response.lastEvaluatedKey;
           }else{
             this.lastEvaluatedKey = {
@@ -154,25 +148,6 @@ export default class HomeViewComponent implements OnInit {
         },
       });
 
-
-/*       this.postsService.getPostsByUser(this.user.lastPostKey).subscribe({
-        next: (response) => {
-          if (response.posts.length) {
-            console.log('responde, ', response.posts)
-            let concatArray = this.user.posts.concat(response.posts);
-            this.user.posts = concatArray;
-            this.user.lastPostKey = response.lastEvaluatedKey;
-            this.queryExecuted = false;
-            this.loadingPosts = false;
-          }
-        },
-        error: (error) => {
-          console.log(error);
-          this.queryExecuted = false;
-          this.loadingPosts = false;
-          this.user.lastPostKey = '';
-        },
-      }); */
     }
   }
 }

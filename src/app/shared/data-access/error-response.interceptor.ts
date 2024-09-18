@@ -18,12 +18,8 @@ function handleErrorResponse(error: HttpErrorResponse, router: Router) {
   console.log(error.error)
   const type = error.error.type
   if (type == 'EXPIRED_TOKEN' || type == "MISSING_TOKEN" || type == "INVALID_TOKEN" ) {
-    console.log('se ejecuta el borrado')
     removeToken();
-    /* store.removeUser() */
     window.location.reload();
-    
-    /* router.navigate(['/']); */
 
     return throwError(() => error.error.message);
   }
