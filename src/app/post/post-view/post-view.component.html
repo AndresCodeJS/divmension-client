@@ -25,7 +25,7 @@
       <!-- IMAGEN -->
       <div class="aspect-square w-full overflow-hidden rounded-t-lg">
       <img
-        src="{{ post.imageUrl || '/sin-perfil.jpg' }}"
+        src="{{ post.imageUrl || 'https://divmension-12e561930bc7.s3.amazonaws.com/images/sin-perfil.jpg' }}"
         alt="Logo"
         class="object-cover w-full h-full shadow-lg"
       />
@@ -134,7 +134,7 @@
               <!-- FOTO PERFIL -->
               <div class="flex justify-center items-start w-3/12 sm:w-2/12 cursor-pointer" [routerLink]="['/user/profile', item.user] " (click)="closePostDetails()">
                 <img
-                  [src]="item.imageUrl || '/sin-perfil.jpg'"
+                  [src]="item.imageUrl || 'https://divmension-12e561930bc7.s3.amazonaws.com/images/sin-perfil.jpg'"
                   alt="Photo"
                   class="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover shadow-lg"
                 />

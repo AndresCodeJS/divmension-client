@@ -22,7 +22,7 @@
         />
         }@else {
         <img
-          src="{{ '/sin-perfil.jpg' }}"
+          src="{{ 'https://divmension-12e561930bc7.s3.amazonaws.com/images/sin-perfil.jpg' }}"
           alt="Logo"
           class="w-28 h-28 md:w-44 md:h-44 rounded-full object-cover shadow-lg"
         />
@@ -139,8 +139,13 @@
   <div class="flex flex-col">
     @if(user.posts.length){
 
-    <div
+    <!--  <div
       class="grid grid-cols-1 w-[25rem] md:grid-cols-2 md:w-[37rem] lg:grid-cols-3 lg:w-[55rem] mt-10 mb-3 sm:mb-14"
+    > -->
+    <div
+      class="grid grid-cols-1 w-[25rem] md:grid-cols-2 md:w-[37rem] lg:grid-cols-3 lg:w-[55rem] mt-10 mb-3 sm:mb-14 {{
+        user.posts.length == 1 ? 'lg:grid-cols-2 lg:pl-44' : ''
+      }} {{ user.posts.length == 2 ? 'lg:ml-40' : '' }}"
     >
       @for (item of user.posts; track item.postId){
       <button (click)="openPostCard(item)">
@@ -148,7 +153,7 @@
       </button>
       }
     </div>
-   
+
     }@else {
     <div class="flex w-full justify-center mt-20">
       <p class="text-lg md:text-xl text-gray-dark">There aren't posts yet</p>
@@ -188,19 +193,23 @@
 <app-loading-screen />
 }
 
- <!-- POST DETAILS ------------------------------->
- <div
- class="fixed flex top-0 left-0 justify-center h-dvh w-full  transition ease-in-out duration-500   bg-black {{
-  !isPostCardOpen? 'opacity-0 invisible' : 'opacity-60 visible'
-}}"
+<!-- POST DETAILS ------------------------------->
+<div
+  class="fixed flex top-0 left-0 justify-center h-dvh w-full  transition ease-in-out duration-500   bg-black {{
+    !isPostCardOpen ? 'opacity-0 invisible' : 'opacity-60 visible'
+  }}"
 ></div>
- <div
-#postCardContainer
- class="fixed flex top-0 left-0 pb-24 justify-center h-dvh w-full transition ease-in-out duration-500 overflow-y-auto {{
-  !isPostCardOpen? 'opacity-0 invisible' : 'opacity-1 visible'
-}}"
+<div
+  #postCardContainer
+  class="fixed flex top-0 left-0 pb-24 justify-center h-dvh w-full transition ease-in-out duration-500 overflow-y-auto {{
+    !isPostCardOpen ? 'opacity-0 invisible' : 'opacity-1 visible'
+  }}"
 >
-  <app-post-view class="flex mx-5 my-5 w-11/12 sm:w-9/12 md:w-10/12 lg:w-6/12" (closePostDetailsEmitter)="closePostCard()" [isPostCardOpen]="isPostCardOpen" [post]="post" [showCommentsButton]="showCommentsButton"/>  
+  <app-post-view
+    class="flex mx-5 my-5 w-11/12 sm:w-9/12 md:w-10/12 lg:w-6/12"
+    (closePostDetailsEmitter)="closePostCard()"
+    [isPostCardOpen]="isPostCardOpen"
+    [post]="post"
+    [showCommentsButton]="showCommentsButton"
+  />
 </div>
-
-

@@ -123,8 +123,8 @@ export default class NewPostFormComponent implements OnInit, OnDestroy {
       //Se modifican las dimensiones de la imagen
       const resizedFile = (await this.imageResizer.resizeImage(
         selectedFile,
-        400,
-        400
+        800,
+        800
       )) as File;
 
       this.isLoading = true;
