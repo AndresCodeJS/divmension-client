@@ -19,9 +19,9 @@ import { truncateText as truncateDescription } from '../../utils/stringManager';
 export default class HomeViewComponent implements OnInit {
   postService = inject(PostsService);
 
-  loadingScreen = false;
+  loadingScreen = true;
 
-  loadingPosts = false;
+  loadingPosts = true;
 
   lastEvaluatedKey: LastEvaluatedKey = {
     pk: 'none',

@@ -100,10 +100,6 @@ export class UsersService extends BaseHttpService {
       'Content-Type': 'application/json',
     });
 
-    console.log('se llamara a la ruta')
-    console.log(photoUrl)
-    console.log(headers)
-
     return this.http.post<any>(
       `${this.apiUrl}/users/profile-photo`,
       { photoUrl },

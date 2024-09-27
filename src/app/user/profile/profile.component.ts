@@ -98,7 +98,7 @@ export default class ProfileComponent implements OnInit {
     lastPostKey: '',
   };
 
-  isLoading = false;
+  isLoading = true;
   isLoadingPhoto = false;
   userNotFound = false;
 
