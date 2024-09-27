@@ -58,7 +58,6 @@ export default class ProfileComponent implements OnInit {
       element.scrollHeight - element.scrollTop < element.clientHeight + 500;
 
     if (atBottom && !this.queryExecuted && this.user.lastPostKey) {
-      /* console.log('Llegaste al final del contenedor'); */
 
       this.loadingPosts = true;
 
@@ -69,7 +68,6 @@ export default class ProfileComponent implements OnInit {
       this.postsService.getPostsByUser(this.user.lastPostKey).subscribe({
         next: (response) => {
           if (response.posts.length) {
-            console.log('responde, ', response.posts)
             let concatArray = this.user.posts.concat(response.posts);
             this.user.posts = concatArray;
             this.user.lastPostKey = response.lastEvaluatedKey;
@@ -148,7 +146,6 @@ export default class ProfileComponent implements OnInit {
   followUser() {
     this.usersService.followUser(this.user.username).subscribe({
       next: (response) => {
-        console.log(response);
         this.isFollowing = true;
         this.user.followers = response.followers;
       },
@@ -162,7 +159,6 @@ export default class ProfileComponent implements OnInit {
   unfollowUser() {
     this.usersService.unfollowUser(this.user.username).subscribe({
       next: (response) => {
-        console.log(response);
         this.isFollowing = false;
         this.user.followers = response.followers;
       },
@@ -182,7 +178,6 @@ export default class ProfileComponent implements OnInit {
         if (event.target.files[0].type.match(/image\/*/)) {
           // solo imagenes
           let selectedFile = event.target.files[0] as File;
-          console.log('se cargo un archivo');
           await this.uploadFile(selectedFile);
         } else {
           this.selectedFile = null;
@@ -211,12 +206,6 @@ export default class ProfileComponent implements OnInit {
         400
       )) as File;
 
-      console.log('Normal Image');
-      console.log(selectedFile.size);
-
-      console.log('Image resized');
-      console.log(resizedFile.size);
-
       this.user.photoUrl = '';
       this.isLoadingPhoto = true;
       this.s3Uploader
@@ -226,7 +215,6 @@ export default class ProfileComponent implements OnInit {
 
           this.usersService.updateProfilePhoto(url).subscribe({
             next: (response) => {
-              console.log(response);
               setToken(response.jwt)
               this.store.setPhoto(url)
               this.user.photoUrl = url;
@@ -259,8 +247,6 @@ export default class ProfileComponent implements OnInit {
       //Peticion HTTP GET para obtener el perfil del usuario
       this.usersService.getUserProfile(usernameParam).subscribe({
         next: (response: any) => {
-          console.log('respuesta', response.user);
-
           this.user = response.user;
 
           this.isFollowing = response.isFollowing;

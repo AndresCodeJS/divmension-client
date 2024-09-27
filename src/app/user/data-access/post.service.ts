@@ -78,8 +78,6 @@ export class PostsService extends BaseHttpService {
       'Content-Type': 'application/json',
     });
 
-    console.log('se va a llamar a', username, postId);
-
     return this.http.get<any>(
       `${this.apiUrl}/posts/details/${username}/${postId}`,
       { headers }
@@ -135,8 +133,6 @@ export class PostsService extends BaseHttpService {
     postId: string,
     lastCommentKey: LastEvaluatedKey
   ): Observable<any> {
-    console.log(postId);
-    console.log(lastCommentKey.sk);
 
     return this.http.get<any>(
       `${this.apiUrl}/posts/comments-list/${postId}/${lastCommentKey.sk}`

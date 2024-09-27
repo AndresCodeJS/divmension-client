@@ -125,14 +125,10 @@ export class LoginFormComponent {
           this.form.reset()
 
           this.isLoading = false
-          
-          console.log(response);
 
           if (response.jwt) {
             setToken(response.jwt);
           }
-
-          console.log('se va a guardar', response.user)
 
           this.store.setUser(response.user)
 

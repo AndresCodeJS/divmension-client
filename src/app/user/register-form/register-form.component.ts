@@ -55,9 +55,6 @@ export default class RegisterFormComponent {
       //detecta si el click fué afuera del componente
 
       if (!this.closeSignForm) {
-        console.log('click fuera del formulario');
-        console.log('el valor de closeSign es:' + this.closeSignForm);
-
         this.form.reset();
         this.errors.email = false;
         this.errors.email = false;
@@ -173,9 +170,6 @@ export default class RegisterFormComponent {
       this.usersService.setSignUpUser(this.form.getRawValue()).subscribe({
         next: (response: any) => {
           this.form.reset();
-
-          console.log(response);
-
           //se almacena el token de acceso en localStorage
           if (response.jwt) {
             setToken(response.jwt);

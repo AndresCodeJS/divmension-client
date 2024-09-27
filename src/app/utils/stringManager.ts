@@ -26,10 +26,6 @@ export function truncateText(text: string, maxLength: number) {
 
     let pageBreaks = lines.length - 1;
 
-  /*   console.log('longitud es', pageBreaks)
-
-    console.log('las lineas son,', lines) */
-
     if(pageBreaks>2){
         truncated = lines[0] + '\n' + lines[1] + '\n' + lines[2]
     }
