@@ -84,7 +84,18 @@ export default class PostViewComponent {
   //CERRAR VENTANA DE DETALLES DEL POST
   closePostDetails() {
     this.closePostDetailsEmitter.emit(true);
-    this.commentInput.nativeElement.innerHTML = '';
+    if (this.store.user().username) {
+      this.commentInput.nativeElement.innerHTML = '';
+    }
+    this.queriedComments = false
+    this.content = '';
+    this.errorLength = false;
+    this.comments = [];
+    this.lastCommentKey = {
+      pk: '',
+      sk: 'none',
+    };
+    this.isClicked = false;
   }
 
   //COMENTARIOS ----------------------------------------------------------

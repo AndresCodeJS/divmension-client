@@ -132,7 +132,7 @@
               class="flex w-full shadow-sm pl-2 rounded-md border border-gray-medium bg-gray-medium py-4 gap-1 md:gap-2"
             >
               <!-- FOTO PERFIL -->
-              <div class="flex justify-center items-start w-3/12 sm:w-2/12">
+              <div class="flex justify-center items-start w-3/12 sm:w-2/12 cursor-pointer" [routerLink]="['/user/profile', item.user] " (click)="closePostDetails()">
                 <img
                   [src]="item.imageUrl || '/sin-perfil.jpg'"
                   alt="Photo"
@@ -142,7 +142,7 @@
               <!-- CONTENIDO -->
               <div class="flex flex-col items-start gap-0.5 w-9/12 sm:w-10/12">
                 <div class="flex w-11/12 justify-between">
-                  <p class="text-base font-semibold text-gray-heavy">
+                  <p class="text-base font-semibold text-gray-heavy cursor-pointer" [routerLink]="['/user/profile', item.user]" (click)="closePostDetails()">
                     {{ item.user }}
                   </p>
 
