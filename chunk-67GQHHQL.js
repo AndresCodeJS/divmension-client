@@ -1,4 +1,4 @@
-import{a as S,b as k}from"./chunk-EWFMLPAE.js";import{g as y}from"./chunk-MA5SRXVH.js";import{Ja as C,La as c,Na as x,Pa as h,Sa as n,Ta as r,Ua as l,X as m,ab as s,bb as p,cb as w,fa as d,ga as g,hb as f,ua as v,xa as o}from"./chunk-362D2ZQM.js";function b(e,u){let t=e.slice(0,u),a=t.lastIndexOf(" ");a>0&&(t=t.slice(0,a)),t=t.trim(),t=t.replace(/^\s+/gm,""),t=t.replace(/(\n){3,}/g,`
+import{a as S,b as k}from"./chunk-EVS2O6EH.js";import{g as y}from"./chunk-MA5SRXVH.js";import{Ja as C,La as c,Na as x,Pa as h,Sa as n,Ta as r,Ua as l,X as m,ab as s,bb as p,cb as w,fa as d,ga as g,hb as f,ua as v,xa as o}from"./chunk-362D2ZQM.js";function b(e,u){let t=e.slice(0,u),a=t.lastIndexOf(" ");a>0&&(t=t.slice(0,a)),t=t.trim(),t=t.replace(/^\s+/gm,""),t=t.replace(/(\n){3,}/g,`
 
 `);let i=t.split(`
 `);return i.length-1>2&&(t=i[0]+`
