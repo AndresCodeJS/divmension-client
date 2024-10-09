@@ -3,11 +3,16 @@ import { catchError, throwError } from 'rxjs';
 import { removeToken } from '../../user/data-access/local-storage';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
-/* import { Store } from '../../store/store'; */
+import { Store } from '../../store/store';
 
 export const ErrorResponseInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
- /*  const store = inject(Store) */
+  /* const store = inject(Store)
+
+ console.log('ejecucion de interceptor', store.user()) */
+ //TODO 
+ //reestablecer conexion del chat si hay un usuario logueado+
+ 
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => handleErrorResponse(error, router))

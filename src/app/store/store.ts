@@ -6,14 +6,15 @@ import {
   withState,
 } from '@ngrx/signals';
 import { IUserStore } from '../shared/interfaces/user.interface';
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { getToken, removeToken } from '../user/data-access/local-storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export interface IState {
   user: IUserStore;
   isLoading: boolean;
-  hideButton: boolean
+  hideButton: boolean;
+  intervalId: any
 }
 
 const initialState: IState = {
@@ -24,19 +25,20 @@ const initialState: IState = {
     photoUrl: '',
   },
   isLoading: false,
-  hideButton: false
+  hideButton: false,
+  intervalId: ''
 };
 
 export const Store = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withMethods(({ user, isLoading, ...store }) => {
+  withMethods(({ user, isLoading, intervalId, ...store }) => {
     return {
       setUser(user: IUserStore) {
         patchState(store, { user });
       },
-      setPhoto(url:string) {
-        patchState(store, {  user:{...user(), photoUrl:url} });
+      setPhoto(url: string) {
+        patchState(store, { user: { ...user(), photoUrl: url } });
       },
       removeUser() {
         patchState(store, {
@@ -52,9 +54,18 @@ export const Store = signalStore(
       setLoading(value: boolean) {
         patchState(store, { isLoading: value });
       },
-      hideFloatingButton(value: boolean){
-        patchState(store, { hideButton: value});
+      hideFloatingButton(value: boolean) {
+        patchState(store, { hideButton: value });
+      },
+      resetRefreshInterval(){
+
+        clearInterval(intervalId())
         
+      /*   patchState(store, { intervalId: value  });
+        console.log('se refresca timeout',) */
+      },
+      setRefreshInterval(value: any){
+        patchState(store, { intervalId: value  });
       }
     };
   }),
@@ -83,11 +94,26 @@ export const Store = signalStore(
             next: (user) => {
               store.setUser(user);
               store.setLoading(false);
+
+              //TODO
+              //Conecta websocket
+            /*   console.log('Arranca el socket con ,', user.username);
+              let contador = 0
+              let intervalId = setInterval(() => {
+                console.log('refrescando la conexion,')
+              },1000)
+
+              store.setRefreshInterval(intervalId) */
+
+             /*  setTimeout (()=> {
+                clearInterval(timeoutId)
+              }, 10000) */
+
             },
             error: (err) => {
-              console.log(err)
+              console.log(err);
               store.setLoading(false);
-              removeToken()
+              removeToken();
             },
           });
       }
