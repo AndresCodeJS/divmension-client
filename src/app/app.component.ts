@@ -3,8 +3,9 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/ui/navbar/header.component';
 import FloatingButtonComponent from './shared/ui/floating-button/floating-button.component';
 import { Store } from './store/store';
-import { io, Socket } from 'socket.io-client';
-import { getToken } from './user/data-access/local-storage';
+import { webSocketService } from './shared/data-access/websocket-service';
+/* import { io, Socket } from 'socket.io-client'; */
+/* import { getToken } from './user/data-access/local-storage'; */
 
 @Component({
   selector: 'app-root',
@@ -16,10 +17,12 @@ import { getToken } from './user/data-access/local-storage';
 export class AppComponent implements OnInit {
   store = inject(Store);
 
-  private socket: Socket;
+  webSocket: any;
 
-  constructor() {
-    this.socket = io(`wss://narritfovc.execute-api.us-east-1.amazonaws.com/prod/?token=${getToken()}`); // ENV WEBSOCKET URL
+  /* private socket: Socket; */
+
+  constructor(private websocketService: webSocketService) {
+    /* this.socket = io(`wss://narritfovc.execute-api.us-east-1.amazonaws.com/prod/?token=${getToken()}`); // ENV WEBSOCKET URL */
   }
 
   //USADO PARA REFRESCAR LA CONEXION CADA 9 MINUTOS
@@ -31,12 +34,14 @@ export class AppComponent implements OnInit {
   //USADO PARA VALIDAR SI EL USUARIO DEBE RECONECTARSE
   isOnline = false;
 
+  connection = new WebSocket('wss://wctaz4ns99.execute-api.us-east-1.amazonaws.com/prod');
+
   ngOnInit(): void {
     this.connect()
 
 
     //FUNCIONES EJECUTADAS CUANDO SE INTERACTUA CON EL SOCKET
-    this.socket.on('connect', () => {
+   /*  this.socket.on('connect', () => {
       console.log('Connected to WebSocket');
     });
 
@@ -46,12 +51,14 @@ export class AppComponent implements OnInit {
 
     this.socket.on('disconnect', () => {
       console.log('Disconnected from WebSocket');
-    });
+    }); */
   }
 
   async connect() {
     //conectar socket
     /* this.socket.connect(); */
+    /* this.websocketService.connectSocket('message'); */
+    this.webSocket = new WebSocket('wss://wctaz4ns99.execute-api.us-east-1.amazonaws.com/prod/');
 
     //INICIA TEMPORIZADOR DE DESCONEXION CUANDO EL USUARIO SE ENCUENTRA AUSENTE
     this.disconnectTimeoutId = setTimeout(() => {
