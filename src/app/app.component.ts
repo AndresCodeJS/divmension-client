@@ -18,12 +18,12 @@ import { getToken } from './user/data-access/local-storage';
 export class AppComponent implements OnInit {
   store = inject(Store);
 
- /*  webSocket: any; */
+  /*  webSocket: any; */
 
   /* private socket: Socket; */
 
   /* constructor(private websocketService: webSocketService) { */
-    /* this.socket = io(`wss://narritfovc.execute-api.us-east-1.amazonaws.com/prod/?token=${getToken()}`); // ENV WEBSOCKET URL */
+  /* this.socket = io(`wss://narritfovc.execute-api.us-east-1.amazonaws.com/prod/?token=${getToken()}`); // ENV WEBSOCKET URL */
   /* } */
 
   //USADO PARA REFRESCAR LA CONEXION CADA 9 MINUTOS
@@ -35,22 +35,15 @@ export class AppComponent implements OnInit {
   //USADO PARA VALIDAR SI EL USUARIO DEBE RECONECTARSE
   isOnline = false;
 
-  webSocket:any
-
-  /* connection = new WebSocket('wss://wctaz4ns99.execute-api.us-east-1.amazonaws.com/prod'); */
+  webSocket: any;
 
   ngOnInit(): void {
-    this.connect()
+    if (getToken()) {
+      this.connect();
+    }
 
-    this.webSocket.addEventListener('open', this.onSocketOpen())
-
-    this.webSocket.addEventListener('close', this.onSocketClose())
-
-    this.webSocket.addEventListener('message', (event:any)=>{
-      this.onSocketMessage(event)
-    })
     //FUNCIONES EJECUTADAS CUANDO SE INTERACTUA CON EL SOCKET
-   /*  this.socket.on('connect', () => {
+    /*  this.socket.on('connect', () => {
       console.log('Connected to WebSocket');
     });
 
@@ -63,68 +56,88 @@ export class AppComponent implements OnInit {
     }); */
   }
 
-  onSocketOpen(){
-    console.log('WebSocket connected')
+  /*   onSocketOpen() {
+    console.log('WebSocket connected');
   }
 
-  onSocketMessage(event:any){
+  onSocketMessage(event: any) {}
 
+  onSocketClose() {} */
+
+  async init() {
+    this.webSocket = new WebSocket(
+      //url apigateway websocket
+      `wss://narritfovc.execute-api.us-east-1.amazonaws.com/prod/?token=${getToken()}`
+    );
   }
-
-  onSocketClose(){
-
-  }
-
 
   async connect() {
     //conectar socket
-    this.webSocket = new WebSocket(`wss://narritfovc.execute-api.us-east-1.amazonaws.com/prod/?token=${getToken()}`);
+    this.init();
 
-
-    //INICIA TEMPORIZADOR DE DESCONEXION CUANDO EL USUARIO SE ENCUENTRA AUSENTE
-    this.disconnectTimeoutId = setTimeout(() => {
-      console.log('intervalo de desconexion');
-      /* }, 1000*60*30) // Se desconecta a los 30 min de inactividad */
-      
-    }, 3000); // Se desconecta a los 30 min de inactividad
+    //INICIA TEMPORIZADOR DE DESCONEXION PARA CUANDO EL USUARIO SE ENCUENTRA AUSENTE DURANTE UN TIEMPO
+    this.setDisconnectTimeout();
 
     //INICIA EL INTERVALO PARA REFRESCAR CONEXION CADA 9 MIN
-    /* this.pingIntervalId = setInterval(() => {
-      console.log('refrescando la conexion,')
-    },1000*60*9) */
     this.pingIntervalId = setInterval(() => {
-      let timestamp = Date.now()
-      console.log('refrescando la conexion,', new Date(timestamp))
-      this.webSocket?.send(JSON.stringify({
-        action:"SEND_MESSAGE",
-        data:{
-          message:"Ping de Actualizacion"
-        }
-      }))
-    },1000*60*9)
+      let timestamp = Date.now();
+      console.log('refrescando la conexion,', new Date(timestamp));
+      this.webSocket?.send(
+        JSON.stringify({
+          action: 'SEND_MESSAGE',
+          data: {
+            message: 'Ping de Actualizacion',
+          },
+        })
+      );
+    }, 1000 * 60 * 9);
+
+    //INICIA EL INTERVALO DE RENOVACION DE CONEXION CADA 1 HORA Y 50 MINUTOS
+    this.renewIntervalId = setInterval(() => {
+      let timestamp = Date.now();
+      console.log('renovando conexion,', new Date(timestamp));
+
+      //LUEGO DE 1H Y 50M SE RENUEVA LA CONEXION
+      //SE CIERRA EL SOCKET ACTUAL ANTES DE SU VENCIMIENTO
+      this.webSocket.close();
+      //SE ABRE UNA NUEVA CONEXION
+      this.init();
+    }, 1000 * 60 * 110);
 
     this.isOnline = true;
   }
 
   async disconnect() {
     //limpiar intervalos
+    clearInterval(this.pingIntervalId);
+    clearInterval(this.renewIntervalId);
+    this.webSocket.close();
     this.isOnline = false;
+  }
+
+  setDisconnectTimeout() {
+    this.disconnectTimeoutId = setTimeout(() => {
+      console.log('Se desconectó el user por inactividad');
+      this.disconnect();
+    }, 20000); // Se desconecta a los 30 min de inactividad
   }
 
   @HostListener('document:click', ['$event'])
   handleClick(event: MouseEvent) {
-    //CLICK DETECTADO PARA REINICIAR EL TEMPORIZADOR DE DESCONEXION 
+    //CLICK DETECTADO PARA REINICIAR EL TEMPORIZADOR DE DESCONEXION
     console.log('Click detectado en la página:', this.store.user().username);
 
-    if (this.isOnline) {
-      //REINICIA EL TEMPORIZADOR DE DESCONEXION
-      clearTimeout(this.disconnectTimeoutId);
-      this.disconnectTimeoutId = setTimeout(() => {
-        console.log('intervalo de desconexion');
-        /* }, 1000*60*30) // Se desconecta a los 30 min de inactividad */
-      }, 3000); // Se desconecta a los 30 min de inactividad
+    //REINICIA EL TEMPORIZADOR CADA VEZ QUE EL USUARIO DA CLICK EN LA PAGINA
+    if (getToken()) {
+      if (this.isOnline) {
+        //REINICIA EL TEMPORIZADOR DE DESCONEXION
+        console.log('se renueva temporizador de ausencia');
+        clearTimeout(this.disconnectTimeoutId);
+        this.setDisconnectTimeout();
+      } else {
+        console.log('el usuario estaba desconectado, se reconecta');
+        this.connect();
+      }
     }
-
-    /* this.store.resetRefreshInterval() */
   }
 }
