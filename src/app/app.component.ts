@@ -4,6 +4,7 @@ import { HeaderComponent } from './shared/ui/navbar/header.component';
 import FloatingButtonComponent from './shared/ui/floating-button/floating-button.component';
 import { Store } from './store/store';
 import { webSocketService } from './shared/data-access/websocket-service';
+import { getToken } from './user/data-access/local-storage';
 /* import { io, Socket } from 'socket.io-client'; */
 /* import { getToken } from './user/data-access/local-storage'; */
 
@@ -17,13 +18,13 @@ import { webSocketService } from './shared/data-access/websocket-service';
 export class AppComponent implements OnInit {
   store = inject(Store);
 
-  webSocket: any;
+ /*  webSocket: any; */
 
   /* private socket: Socket; */
 
-  constructor(private websocketService: webSocketService) {
+  /* constructor(private websocketService: webSocketService) { */
     /* this.socket = io(`wss://narritfovc.execute-api.us-east-1.amazonaws.com/prod/?token=${getToken()}`); // ENV WEBSOCKET URL */
-  }
+  /* } */
 
   //USADO PARA REFRESCAR LA CONEXION CADA 9 MINUTOS
   pingIntervalId: any = '';
@@ -34,12 +35,20 @@ export class AppComponent implements OnInit {
   //USADO PARA VALIDAR SI EL USUARIO DEBE RECONECTARSE
   isOnline = false;
 
-  connection = new WebSocket('wss://wctaz4ns99.execute-api.us-east-1.amazonaws.com/prod');
+  webSocket:any
+
+  /* connection = new WebSocket('wss://wctaz4ns99.execute-api.us-east-1.amazonaws.com/prod'); */
 
   ngOnInit(): void {
     this.connect()
 
+    this.webSocket.addEventListener('open', this.onSocketOpen())
 
+    this.webSocket.addEventListener('close', this.onSocketClose())
+
+    this.webSocket.addEventListener('message', (event:any)=>{
+      this.onSocketMessage(event)
+    })
     //FUNCIONES EJECUTADAS CUANDO SE INTERACTUA CON EL SOCKET
    /*  this.socket.on('connect', () => {
       console.log('Connected to WebSocket');
@@ -54,17 +63,45 @@ export class AppComponent implements OnInit {
     }); */
   }
 
+  onSocketOpen(){
+    console.log('WebSocket connected')
+  }
+
+  onSocketMessage(event:any){
+
+  }
+
+  onSocketClose(){
+
+  }
+
+
   async connect() {
     //conectar socket
-    /* this.socket.connect(); */
-    /* this.websocketService.connectSocket('message'); */
-    this.webSocket = new WebSocket('wss://wctaz4ns99.execute-api.us-east-1.amazonaws.com/prod/');
+    this.webSocket = new WebSocket(`wss://narritfovc.execute-api.us-east-1.amazonaws.com/prod/?token=${getToken()}`);
+
 
     //INICIA TEMPORIZADOR DE DESCONEXION CUANDO EL USUARIO SE ENCUENTRA AUSENTE
     this.disconnectTimeoutId = setTimeout(() => {
       console.log('intervalo de desconexion');
       /* }, 1000*60*30) // Se desconecta a los 30 min de inactividad */
+      
     }, 3000); // Se desconecta a los 30 min de inactividad
+
+    //INICIA EL INTERVALO PARA REFRESCAR CONEXION CADA 9 MIN
+    /* this.pingIntervalId = setInterval(() => {
+      console.log('refrescando la conexion,')
+    },1000*60*9) */
+    this.pingIntervalId = setInterval(() => {
+      let timestamp = Date.now()
+      console.log('refrescando la conexion,', new Date(timestamp))
+      this.webSocket?.send(JSON.stringify({
+        action:"SEND_MESSAGE",
+        data:{
+          message:"Ping de Actualizacion"
+        }
+      }))
+    },1000*60*9)
 
     this.isOnline = true;
   }
