@@ -18,14 +18,6 @@ import { getToken } from './user/data-access/local-storage';
 export class AppComponent implements OnInit {
   store = inject(Store);
 
-  /*  webSocket: any; */
-
-  /* private socket: Socket; */
-
-  /* constructor(private websocketService: webSocketService) { */
-  /* this.socket = io(`wss://narritfovc.execute-api.us-east-1.amazonaws.com/prod/?token=${getToken()}`); // ENV WEBSOCKET URL */
-  /* } */
-
   //USADO PARA REFRESCAR LA CONEXION CADA 9 MINUTOS
   pingIntervalId: any = '';
   //USADO PARA RENOVAR LA CONEXION CADA 1 HORA Y 50 MINUTOS
@@ -119,7 +111,7 @@ export class AppComponent implements OnInit {
     this.disconnectTimeoutId = setTimeout(() => {
       console.log('Se desconectó el user por inactividad');
       this.disconnect();
-    }, 20000); // Se desconecta a los 30 min de inactividad
+    }, 1000*60*30); // Se desconecta a los 30 min de inactividad
   }
 
   @HostListener('document:click', ['$event'])

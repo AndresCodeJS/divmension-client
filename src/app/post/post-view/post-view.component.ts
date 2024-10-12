@@ -214,6 +214,7 @@ export default class PostViewComponent {
 
   showComments() {
     this.loadingComments = true;
+    this.isClicked = true;
     this.postService
       .getComments(this.post.postId, this.lastCommentKey)
       .subscribe({
