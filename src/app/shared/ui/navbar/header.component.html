@@ -90,12 +90,14 @@
   <div class="flex justify-end gap-4 mr-2 md:mr-10 {{store.user().username?'w-2/12':'w-1/12'}} lg:w-2/12">
     @if(!store.isLoading()){ @if(!store.user().username){
     <div class="hidden lg:flex gap-4">
+      <!-- LOGIN BUTTON -->
       <button
         (click)="openLoginForm()"
         class="font-bold text-black hidden sm:block hover:text-gray-heavy"
       >
         Log In
       </button>
+      <!-- SIGNUP BUTTON -->
       <button
         (click)="openSignForm()"
         class="font-bold text-black hidden sm:block hover:text-gray-heavy"
@@ -115,12 +117,6 @@
 
     } }
   </div>
-
-  <!-- Menu con opciones -->
-  <!-- <app-drop-down-menu
-    class="lg:hidden"
-    (onClickMenuEmitter)="onClickMenu($event)"
-  /> -->
 </div>
 
 <!-- FORMULARIO DE REGISTRO -->

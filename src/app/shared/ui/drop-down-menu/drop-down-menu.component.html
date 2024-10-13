@@ -1,8 +1,33 @@
 <!-- Boton para desplegar el dropdown ------------------------------------- -->
 <div class="flex mt-3 md:mr-10 mr-3 rounded-xl p-1 w-full justify-end">
   @if(store.user().username){
-  <app-floating-button />
+  <!-- CHAT BUTTON -->
+  <button
+    (click)="closeDropDownMenu = true"
+    class="font-medium text-gray-heavy hidden lg:block hover:text-gray-heavy mr-7"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1"
+      stroke="currentColor"
+      class="size-9"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
+      />
+    </svg>
+  </button>
+
+  <!-- NEW POST BUTTON -->
+  <div (click)="closeDropDownMenu = true">
+    <app-floating-button />
+  </div>
   }
+
   <button
     (click)="onClickMenu()"
     class="flex lg:hidden backgroundHover p-1 rounded-lg"
@@ -26,14 +51,22 @@
   @if(store.user().username){
 
   <div class="hidden lg:flex">
-    <div class="mt-3" >
-      <p class="font-medium text-gray-heavy cursor-pointer" (click)="onClickMenu()">{{ store.user().username }}</p>
+    <div class="mt-3">
+      <p
+        class="font-medium text-gray-heavy cursor-pointer"
+        (click)="onClickMenu()"
+      >
+        {{ store.user().username }}
+      </p>
     </div>
 
     <button (click)="onClickMenu()" class="sm:ml-2">
       <div class="flex justify-center items-center w-8 h-8 sm:w-12 sm:h-12">
         <img
-          [src]="store.user().photoUrl || 'https://divmension-12e561930bc7.s3.amazonaws.com/images/sin-perfil.jpg'"
+          [src]="
+            store.user().photoUrl ||
+            'https://divmension-12e561930bc7.s3.amazonaws.com/images/sin-perfil.jpg'
+          "
           alt="Profile"
           class="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-cover"
         />
@@ -76,15 +109,29 @@
   class="dropdownProfile flex shadow-md flex-col absolute top-24 right-1 lg:right-10 lg:top-28 w-36 p-4 rounded-lg bg-white border border-gray-light"
 >
   <ul class="flex flex-col gap-3">
+    <!-- PROFILE BUTTON -->
+    <li>
+      <button
+        [routerLink]="['/user/profile', store.user().username]"
+        class="font-bold text-gray-heavy text-sm my-1"
+        (click)="onClickMenuOptions('profile')"
+      >
+        My Profile
+      </button>
+    </li>
+
+    <!-- CHAT BUTTON -->
     <li>
       <button
         [routerLink]="['/user/profile', store.user().username]"
         class="font-bold text-gray-heavy text-sm"
         (click)="onClickMenuOptions('profile')"
       >
-        My Profile
+        Chat
       </button>
     </li>
+
+    <!-- LOG OUT BUTTON -->
     <li>
       <button
         (click)="onClickLogOut()"
