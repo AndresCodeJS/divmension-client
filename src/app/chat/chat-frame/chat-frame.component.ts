@@ -1,22 +1,16 @@
 import { Component, HostListener, inject, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './shared/ui/navbar/header.component';
-import FloatingButtonComponent from './shared/ui/floating-button/floating-button.component';
-import { Store } from './store/store';
-import { webSocketService } from './shared/data-access/websocket-service';
-import { getToken } from './user/data-access/local-storage';
-/* import { io, Socket } from 'socket.io-client'; */
-/* import { getToken } from './user/data-access/local-storage'; */
+import { Store } from '../../store/store';
+import { getToken } from '../../user/data-access/local-storage';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-chat-frame',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FloatingButtonComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  imports: [],
+  templateUrl: './chat-frame.component.html',
+  styles: ``,
 })
-export class AppComponent implements OnInit {
-/*   store = inject(Store);
+export class ChatFrameComponent implements OnInit {
+  store = inject(Store);
 
   //USADO PARA REFRESCAR LA CONEXION CADA 9 MINUTOS
   pingIntervalId: any = '';
@@ -27,12 +21,12 @@ export class AppComponent implements OnInit {
   //USADO PARA VALIDAR SI EL USUARIO DEBE RECONECTARSE
   isOnline = false;
 
-  webSocket: any; */
+  webSocket: any;
 
   ngOnInit(): void {
-   /*  if (getToken()) {
+    if (getToken()) {
       this.connect();
-    } */
+    }
 
     //FUNCIONES EJECUTADAS CUANDO SE INTERACTUA CON EL SOCKET
     /*  this.socket.on('connect', () => {
@@ -48,22 +42,14 @@ export class AppComponent implements OnInit {
     }); */
   }
 
-  /*   onSocketOpen() {
-    console.log('WebSocket connected');
-  }
-
-  onSocketMessage(event: any) {}
-
-  onSocketClose() {} */
-
-/*   async init() {
+  async init() {
     this.webSocket = new WebSocket(
       //url apigateway websocket
       `wss://narritfovc.execute-api.us-east-1.amazonaws.com/prod/?token=${getToken()}`
     );
-  } */
+  }
 
-  /* async connect() {
+  async connect() {
     //conectar socket
     this.init();
 
@@ -97,24 +83,24 @@ export class AppComponent implements OnInit {
     }, 1000 * 60 * 110);
 
     this.isOnline = true;
-  } */
+  }
 
-/*   async disconnect() {
+  async disconnect() {
     //limpiar intervalos
     clearInterval(this.pingIntervalId);
     clearInterval(this.renewIntervalId);
     this.webSocket.close();
     this.isOnline = false;
-  } */
+  }
 
-/*   setDisconnectTimeout() {
+  setDisconnectTimeout() {
     this.disconnectTimeoutId = setTimeout(() => {
       console.log('Se desconectó el user por inactividad');
       this.disconnect();
-    }, 1000*60*30); // Se desconecta a los 30 min de inactividad
-  } */
+    }, 1000 * 60 * 30); // Se desconecta a los 30 min de inactividad
+  }
 
- /*  @HostListener('document:click', ['$event'])
+  @HostListener('document:click', ['$event'])
   handleClick(event: MouseEvent) {
     //CLICK DETECTADO PARA REINICIAR EL TEMPORIZADOR DE DESCONEXION
     console.log('Click detectado en la página:', this.store.user().username);
@@ -131,5 +117,5 @@ export class AppComponent implements OnInit {
         this.connect();
       }
     }
-  } */
+  }
 }
