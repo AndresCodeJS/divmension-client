@@ -79,6 +79,13 @@ body {
     right: 35%;
   }
 
+  .modal-chat {
+    height: 90%;
+    top: 5%;
+    width: 65%;
+    right: 17%;
+  }
+
 /*   .new-post {
     bottom: 10%;
     right: 48.5%;

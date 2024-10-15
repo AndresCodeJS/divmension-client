@@ -9,12 +9,14 @@ import { IUserStore } from '../shared/interfaces/user.interface';
 import { inject, Injectable } from '@angular/core';
 import { getToken, removeToken } from '../user/data-access/local-storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { IChat } from '../chat/chat.interface';
 
 export interface IState {
   user: IUserStore;
   isLoading: boolean;
   hideButton: boolean;
-  intervalId: any
+  intervalId: any;
+  chat: IChat;
 }
 
 const initialState: IState = {
@@ -26,7 +28,11 @@ const initialState: IState = {
   },
   isLoading: false,
   hideButton: false,
-  intervalId: ''
+  intervalId: '',
+  chat: {
+    isOpen: false,
+    to: 'none',
+  },
 };
 
 export const Store = signalStore(
@@ -57,16 +63,24 @@ export const Store = signalStore(
       hideFloatingButton(value: boolean) {
         patchState(store, { hideButton: value });
       },
-      resetRefreshInterval(){
+      openChat(username: string) {
+        patchState(store, {
+          chat: {
+            isOpen: true,
+            to: username || 'none',
+          },
+        });
+      },
+      /*  resetRefreshInterval(){
 
         clearInterval(intervalId())
         
-      /*   patchState(store, { intervalId: value  });
-        console.log('se refresca timeout',) */
-      },
-      setRefreshInterval(value: any){
         patchState(store, { intervalId: value  });
-      }
+        console.log('se refresca timeout',)
+      }, */
+      /*  setRefreshInterval(value: any){
+        patchState(store, { intervalId: value  });
+      } */
     };
   }),
   withHooks({
@@ -97,7 +111,7 @@ export const Store = signalStore(
 
               //TODO
               //Conecta websocket
-            /*   console.log('Arranca el socket con ,', user.username);
+              /*   console.log('Arranca el socket con ,', user.username);
               let contador = 0
               let intervalId = setInterval(() => {
                 console.log('refrescando la conexion,')
@@ -105,10 +119,9 @@ export const Store = signalStore(
 
               store.setRefreshInterval(intervalId) */
 
-             /*  setTimeout (()=> {
+              /*  setTimeout (()=> {
                 clearInterval(timeoutId)
               }, 10000) */
-
             },
             error: (err) => {
               console.log(err);

@@ -1,11 +1,27 @@
 <div class="fixed flex flex-col bg-gray-light w-full">
   <app-header class="flex w-full" />
 
-  <app-chat-frame/>
+  <!-- CHAT -->
+  <!-- <div
+  class="fixed bg-black h-dvh w-full transition ease-in-out duration-500 {{
+    closeLoginForm ? 'opacity-0 invisible' : 'opacity-50 visible'
+  }}"
+></div> -->
+  <div
+    class="fixed bg-black h-dvh w-full transition ease-in-out duration-500 {{
+      'opacity-50 visible'
+    }}"
+  ></div>
+
+  <!-- <app-chat-frame  class="transition ease-in-out duration-1000 {{
+    closeSignForm ? 'opacity-0 invisible' : 'opacity-100 visible'
+  }}"/> -->
+
+  <app-chat-frame
+    class="transition ease-in-out duration-1000 {{ 'opacity-100 visible' }}"
+  />
 
   <main class="pt-28">
     <router-outlet />
   </main>
-
 </div>
-
