@@ -1,4 +1,14 @@
-import { Component, HostListener, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  inject,
+  Input,
+  OnInit,
+  Output,
+  Renderer2,
+} from '@angular/core';
 import { Store } from '../../store/store';
 import { getToken } from '../../user/data-access/local-storage';
 
@@ -22,6 +32,26 @@ export class ChatFrameComponent implements OnInit {
   isOnline = false;
 
   webSocket: any;
+
+  @Input() isOpen = false
+
+  constructor(private renderer: Renderer2, private el: ElementRef) {
+     // Listener global para clicks fuera del componente
+     this.renderer.listen('document', 'click', (event: Event) => {
+      this.onDocumentClick(event);
+    });
+  }
+
+  @Output() closeChatEventEmitter = new EventEmitter <string>()
+
+  onDocumentClick(event: Event) {
+    const clickedInside = this.el.nativeElement.contains(event.target);
+    if (!clickedInside && this.isOpen) {
+      //Detecta si se hizo click fuera del componente
+      console.log('click fuera del componente')
+      this.store.closeChat()
+    }
+  }
 
   ngOnInit(): void {
     if (getToken()) {

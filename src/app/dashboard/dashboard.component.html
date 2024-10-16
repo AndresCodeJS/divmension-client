@@ -7,19 +7,29 @@
     closeLoginForm ? 'opacity-0 invisible' : 'opacity-50 visible'
   }}"
 ></div> -->
+  <!-- @if(chatOpened){ -->
+
+ 
+
   <div
     class="fixed bg-black h-dvh w-full transition ease-in-out duration-500 {{
-      'opacity-50 visible'
+      chatOpened ? 'opacity-50 visible' : 'opacity-0 invisible'
     }}"
   ></div>
 
   <!-- <app-chat-frame  class="transition ease-in-out duration-1000 {{
-    closeSignForm ? 'opacity-0 invisible' : 'opacity-100 visible'
-  }}"/> -->
+      closeSignForm ? 'opacity-0 invisible' : 'opacity-100 visible'
+    }}"/> -->
 
   <app-chat-frame
-    class="transition ease-in-out duration-1000 {{ 'opacity-100 visible' }}"
+  [isOpen]="chatOpened"
+    class="transition ease-in-out duration-100 {{
+      chatOpened ? 'opacity-100 visible' : 'opacity-0 invisible'
+    }}"
   />
+  
+
+  <!-- } -->
 
   <main class="pt-28">
     <router-outlet />

@@ -49,6 +49,11 @@ export default class ProfileComponent implements OnInit {
 
   private postsService = inject(PostsService);
 
+  //ENVIAR MENSAJE AL USUARIO
+  sendMessage(){
+    this.store.openChat(this.user.username)
+  }
+
   //Carga nuevos posts cuando se hace scroll hasta la penultima fila
   onScroll(event: any) {
     const element = event.target as HTMLElement;

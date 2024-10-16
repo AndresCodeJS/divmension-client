@@ -46,6 +46,10 @@ export class DropDownMenuComponent {
 
     this.closeDropDownMenu = true
     this.onClickMenuEmitter.emit(option)
+
+    if(option = 'chat'){
+      this.store.openChat()
+    }
   }
 
   //Se ejecuta cuando se realiza click en alguna de las opciones del menu de usuario --------------------------

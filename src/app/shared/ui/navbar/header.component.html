@@ -130,7 +130,7 @@
   (closeSignUpFormEventEmitter)="onClickOut()"
   (openLoginFormEventEmitter)="openLoginForm()"
   [closeSignForm]="closeSignForm"
-  class="transition ease-in-out duration-1000 {{
+  class="transition ease-in-out duration-400 {{
     closeSignForm ? 'opacity-0 invisible' : 'opacity-100 visible'
   }}"
 />
@@ -146,7 +146,7 @@
   (closeFormEventEmitter)="onClickOutLoginForm()"
   (openSignUpFormEventEmitter)="openSignForm()"
   [closeLoginForm]="closeLoginForm"
-  class="transition ease-in-out duration-1000 {{
+  class="transition ease-in-out duration-400 {{
     closeLoginForm ? 'opacity-0 invisible' : 'opacity-100 visible'
   }}"
 />

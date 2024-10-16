@@ -63,7 +63,8 @@ export const Store = signalStore(
       hideFloatingButton(value: boolean) {
         patchState(store, { hideButton: value });
       },
-      openChat(username: string) {
+      openChat(username?: string) {
+        console.log('recibe instruccion en el storage, ', username)
         patchState(store, {
           chat: {
             isOpen: true,
@@ -71,6 +72,13 @@ export const Store = signalStore(
           },
         });
       },
+      closeChat(){
+        patchState(store, {
+          chat: {
+            isOpen: false
+          },
+        });
+      }
       /*  resetRefreshInterval(){
 
         clearInterval(intervalId())

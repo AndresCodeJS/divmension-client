@@ -3,7 +3,7 @@
   @if(store.user().username){
   <!-- CHAT BUTTON -->
   <button
-    (click)="closeDropDownMenu = true"
+    (click)="onClickMenuOptions('chat')"
     class="font-medium text-gray-heavy hidden lg:block hover:text-gray-heavy mr-7"
   >
     <svg
@@ -125,7 +125,7 @@
       <button
         [routerLink]="['/user/profile', store.user().username]"
         class="font-bold text-gray-heavy text-sm"
-        (click)="onClickMenuOptions('profile')"
+        (click)="onClickMenuOptions('chat')"
       >
         Chat
       </button>
