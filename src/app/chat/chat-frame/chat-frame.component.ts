@@ -11,11 +11,12 @@ import {
 } from '@angular/core';
 import { Store } from '../../store/store';
 import { getToken } from '../../user/data-access/local-storage';
+import { ChatCardComponent } from "../chat-card/chat-card.component";
 
 @Component({
   selector: 'app-chat-frame',
   standalone: true,
-  imports: [],
+  imports: [ChatCardComponent],
   templateUrl: './chat-frame.component.html',
   styles: ``,
 })
