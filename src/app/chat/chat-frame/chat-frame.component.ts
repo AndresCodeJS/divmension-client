@@ -35,6 +35,8 @@ export class ChatFrameComponent implements OnInit {
 
   @Input() isOpen = false
 
+  @Input() chat: string | undefined = ''
+
   constructor(private renderer: Renderer2, private el: ElementRef) {
      // Listener global para clicks fuera del componente
      this.renderer.listen('document', 'click', (event: Event) => {

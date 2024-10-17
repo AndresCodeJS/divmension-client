@@ -43,16 +43,15 @@ body {
 
 .form-input {
   @apply text-xs border-b border-gray-light px-4 focus:outline-none w-full placeholder-gray-medium 
-  pb-3 pt-2 transition ease-in-out duration-500 focus:border-gray-dark text-gray-heavy
+  pb-3 pt-2 transition ease-in-out duration-500 focus:border-gray-dark text-gray-heavy;
 }
 
-.form-label{
-  @apply flex text-gray-dark text-xs font-normal items-center
+.form-label {
+  @apply flex text-gray-dark text-xs font-normal items-center;
 }
 
 @layer components {
-
-   /* Dropdown Menu del Header -----------------------------------------------------------*/
+  /* Dropdown Menu del Header -----------------------------------------------------------*/
   .dropdownProfile::before {
     content: "";
     position: absolute;
@@ -82,24 +81,15 @@ body {
   .modal-chat {
     height: 90%;
     top: 5%;
-    width: 35%;
-    right: 33%;
+    width: 80%;
+    right: 10%;
   }
-
-/*   .new-post {
-    bottom: 10%;
-    right: 48.5%;
-  } */
 
   @media screen and (max-width: 640px) {
     .modal-signup {
       width: 80%;
       right: 10%;
     }
- /*    .new-post {
-      right: 43.5%;
-      bottom: 5%;
-    } */
   }
 
   @media screen and (min-width: 250px) {
@@ -107,7 +97,7 @@ body {
       width: 80%;
       right: 10%;
       height: 60%;
-      top: 15%
+      top: 15%;
     }
   }
 
@@ -116,9 +106,24 @@ body {
       width: 60%;
       right: 20%;
       height: 55%;
-      top: 20%
+      top: 20%;
     }
-   
+
+    .modal-chat {
+      height: 90%;
+      top: 5%;
+      width: 55%;
+      right: 25%;
+    }
+  }
+
+  @media screen and (min-width: 800px) {
+    .modal-chat {
+      height: 90%;
+      top: 5%;
+      width: 45%;
+      right: 33%;
+    }
   }
 
   @media screen and (min-width: 1000px) {
@@ -126,10 +131,14 @@ body {
       width: 40%;
       right: 30%;
       height: 65%;
-      top: 17%
+      top: 17%;
+    }
+
+    .modal-chat {
+      height: 90%;
+      top: 5%;
+      width: 33%;
+      right: 33%;
     }
   }
-
 }
-
-

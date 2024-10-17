@@ -19,12 +19,17 @@ export default class DashboardComponent{
 
  chatOpened = false
 
+ chat:string | undefined = ''
+
   constructor(){
     effect(() => {
       // This will run whenever any part of the store state changes
       console.log('Store state changed:', this.store.chat());
+
+      let chat = this.store.chat()
       
-      this.chatOpened = this.store.chat().isOpen
+      this.chatOpened = chat.isOpen
+      this.chat = chat.to
       
       /* console.log('Chat state:', this.store.chat()); */
       

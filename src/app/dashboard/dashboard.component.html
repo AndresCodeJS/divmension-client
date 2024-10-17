@@ -4,14 +4,15 @@
   <!-- CHAT --------------------------------------------------------->
   <div
     class="fixed bg-black h-dvh w-full transition ease-in-out duration-500 {{
-      chatOpened ? 'opacity-50 visible' : 'opacity-0 invisible'
+      !chatOpened ? 'opacity-50 visible' : 'opacity-0 invisible'
     }}"
   ></div>
 
   <app-chat-frame
+    [chat] = "chat"
     [isOpen]="chatOpened"
     class="transition ease-in-out duration-100 {{
-      chatOpened ? 'opacity-100 visible' : 'opacity-0 invisible'
+      !chatOpened ? 'opacity-100 visible' : 'opacity-0 invisible'
     }}"
   />
 
