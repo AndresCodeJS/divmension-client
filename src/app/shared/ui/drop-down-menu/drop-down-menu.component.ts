@@ -47,7 +47,7 @@ export class DropDownMenuComponent {
     this.closeDropDownMenu = true
     this.onClickMenuEmitter.emit(option)
 
-    if(option = 'chat'){
+    if(option == 'chat'){
       this.store.openChat()
     }
   }

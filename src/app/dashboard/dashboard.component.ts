@@ -12,7 +12,7 @@ import { Store } from '../store/store';
   templateUrl: './dashboard.component.html',
   styles: ``
 })
-export default class DashboardComponent implements OnInit    {
+export default class DashboardComponent{
 
   store = inject(Store)
   private destroyEffect: (() => void) | null = null;
@@ -38,34 +38,5 @@ export default class DashboardComponent implements OnInit    {
       // Perform any other logic you need when the store changes
     });
   }
-
- 
-  ngOnInit(): void {
-  /*   effect(() => { */
-   /*    // This will run whenever any part of the store state changes
-      console.log('Store state changed:', this.store);
-      
-      // You can also react to specific state changes:
-      
-      console.log('Chat state:', this.store.chat());
-      
-      // If you want to perform side effects without creating a dependency,
-      // you can use untracked:
-      untracked(() => {
-        // This won't cause the effect to re-run when isLoading changes
-        console.log('Is loading:', this.store.isLoading());
-      });
-      
-      // Perform any other logic you need when the store changes
-    }); */
-  }
-
-
-
-  
-
-
-
-
 
 }

@@ -68,14 +68,15 @@ export const Store = signalStore(
         patchState(store, {
           chat: {
             isOpen: true,
-            to: username || 'none',
+            to: username || '',
           },
         });
       },
       closeChat(){
         patchState(store, {
           chat: {
-            isOpen: false
+            isOpen: false,
+            to: ''
           },
         });
       }

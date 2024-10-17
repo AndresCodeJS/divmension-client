@@ -42,8 +42,6 @@ export class ChatFrameComponent implements OnInit {
     });
   }
 
-  @Output() closeChatEventEmitter = new EventEmitter <string>()
-
   onDocumentClick(event: Event) {
     const clickedInside = this.el.nativeElement.contains(event.target);
     if (!clickedInside && this.isOpen) {
@@ -133,17 +131,14 @@ export class ChatFrameComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   handleClick(event: MouseEvent) {
     //CLICK DETECTADO PARA REINICIAR EL TEMPORIZADOR DE DESCONEXION
-    console.log('Click detectado en la página:', this.store.user().username);
 
     //REINICIA EL TEMPORIZADOR CADA VEZ QUE EL USUARIO DA CLICK EN LA PAGINA
     if (getToken()) {
       if (this.isOnline) {
         //REINICIA EL TEMPORIZADOR DE DESCONEXION
-        console.log('se renueva temporizador de ausencia');
         clearTimeout(this.disconnectTimeoutId);
         this.setDisconnectTimeout();
       } else {
-        console.log('el usuario estaba desconectado, se reconecta');
         this.connect();
       }
     }

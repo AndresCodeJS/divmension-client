@@ -130,7 +130,6 @@ export default class PostViewComponent {
 
   //PUBLICAR EL COMENTARIO
 
-  /* commentsPosted: IComment[] = [];  */
   queriedComments = false
 
   postComment() {
