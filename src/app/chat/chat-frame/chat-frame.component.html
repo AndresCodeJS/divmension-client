@@ -1,14 +1,24 @@
 <div
-  class="fixed flex flex-row justify-center items-center rounded-xl modal-chat bg-black p-5"
+  class="fixed flex flex-col rounded-xl modal-chat bg-gray-light py-5"
 >
+
+<p class="pl-10 text-xl font-bold mb-10">
+  Chats
+</p>
  <!--  <div
     class="hidden lg:flex lg:flex-col lg:justify-between bg-gray-light w-5/12 h-full rounded-l-3xl lg:p-11"
   ></div> -->
 
   <div
-    class="flex bg-orange w-full h-full rounded-xl"
+    class="flex flex-col  w-full h-full rounded-xl overflow-y-auto"
   >
     @if(store.chat().to){
+      <app-chat-card class="w-full"/>
+      <app-chat-card class="w-full"/>
+      <app-chat-card class="w-full"/>
+      <app-chat-card class="w-full"/>
+      <app-chat-card class="w-full"/>
+      <app-chat-card class="w-full"/>
       <app-chat-card class="w-full"/>
     }@else{
       <p>Lista de chats</p>
