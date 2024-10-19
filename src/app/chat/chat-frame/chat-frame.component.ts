@@ -54,6 +54,24 @@ export class ChatFrameComponent implements OnInit {
     }
   }
 
+  //SE EJECUTA CONSULTA CUANDO SE LLEGA AL PENULTIMO CHAT DE LA LISTA
+  onScroll(event: any) {
+    const element = event.target as HTMLElement;
+
+    //Verdadero cuando se hace scroll hasta la penultima fila de la lista de posts
+    const atBottom =
+      element.scrollHeight - element.scrollTop < element.clientHeight + 500;
+
+      console.log('scrollHeitght', element.scrollHeight)
+
+      console.log('scrollTop',element.scrollTop)
+
+      console.log('clientHeitght',element.clientHeight)
+
+      console.log(atBottom)
+
+  }
+
   ngOnInit(): void {
     if (getToken()) {
       this.connect();
