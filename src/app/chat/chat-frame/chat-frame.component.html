@@ -1,30 +1,39 @@
-<div
-  class="fixed flex flex-col rounded-xl modal-chat bg-gray-light py-5"
->
-
-<p class="pl-10 text-xl font-bold mb-10">
-  Chats
-</p>
- <!--  <div
+<div class="fixed flex flex-col rounded-xl modal-chat bg-gray-light py-5">
+  <!--  <div
     class="hidden lg:flex lg:flex-col lg:justify-between bg-gray-light w-5/12 h-full rounded-l-3xl lg:p-11"
   ></div> -->
 
+  @if(store.chat().to){
+  <!-- INFORMACION DEL USUARIO -->
+  <div class="h-20">
+    <p>Datos del usuario</p>
+  </div>
+  <!-- VENTANA DE MENSAJES -->
   <div
-    class="flex flex-col  w-full h-full rounded-xl overflow-y-auto"
+    class="flex flex-col w-full h-4/6 rounded-xl overflow-y-auto bg-orange"
+    (scroll)="onScroll($event)"
+  ></div>
+  <!-- INPUT DE ESCRITURA -->
+   <div class="h-1/6  mx-5 mt-2">
+
+     <textarea class="h-4/6 w-full rounded-lg "></textarea>
+   </div>
+
+   
+
+  }@else{
+  <p class="pl-10 text-xl font-bold mb-10">Chats</p>
+  <div
+    class="flex flex-col w-full h-full rounded-xl overflow-y-auto"
     (scroll)="onScroll($event)"
   >
-    @if(store.chat().to){
-      <app-chat-card class="w-full"/>
-      <app-chat-card class="w-full"/>
-      <app-chat-card class="w-full"/>
-      <app-chat-card class="w-full"/>
-      <app-chat-card class="w-full"/>
-      <app-chat-card class="w-full"/>
-      <app-chat-card class="w-full"/>
-    }@else{
-      <p>Lista de chats</p>
-    }
-
+    <app-chat-card class="w-full" />
+    <app-chat-card class="w-full" />
+    <app-chat-card class="w-full" />
+    <app-chat-card class="w-full" />
+    <app-chat-card class="w-full" />
+    <app-chat-card class="w-full" />
+    <app-chat-card class="w-full" />
+  </div>
+  }
 </div>
-</div>
-
