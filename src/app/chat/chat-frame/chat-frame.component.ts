@@ -12,11 +12,12 @@ import {
 import { Store } from '../../store/store';
 import { getToken } from '../../user/data-access/local-storage';
 import { ChatCardComponent } from '../chat-card/chat-card.component';
+import { ChatHeaderComponent } from "../chat-header/chat-header.component";
 
 @Component({
   selector: 'app-chat-frame',
   standalone: true,
-  imports: [ChatCardComponent],
+  imports: [ChatCardComponent, ChatHeaderComponent],
   templateUrl: './chat-frame.component.html',
   styles: ``,
 })

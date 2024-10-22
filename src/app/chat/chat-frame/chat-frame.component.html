@@ -1,29 +1,27 @@
-<div class="fixed flex flex-col rounded-xl modal-chat bg-gray-light pt-5">
+<div class="fixed flex flex-col rounded-xl modal-chat bg-white pt-3">
   <!--  <div
     class="hidden lg:flex lg:flex-col lg:justify-between bg-gray-light w-5/12 h-full rounded-l-3xl lg:p-11"
   ></div> -->
 
   @if(store.chat().to){
   <!-- INFORMACION DEL USUARIO -->
-  <div class="h-20">
-    <p>Datos del usuario</p>
-  </div>
+  <app-chat-header/>
   <!-- VENTANA DE MENSAJES -->
   <div
-    class="flex flex-col w-full h-4/6 overflow-y-auto bg-orange px-5"
+    class="flex flex-col w-full h-4/6 overflow-y-auto  px-5"
     (scroll)="onScroll($event)"
   >
     <!-- MENSAJE DE REMITENTE -->
-    <div class="flex w-full bg-yellow justify-end mb-2">
-      <p class="bg-gray-light rounded-lg p-2 px-4 ml-20">
+    <div class="flex w-full justify-end mb-2">
+      <p class="bg-gray-light rounded-lg p-2 px-4 ml-20 shadow-md">
         Esto
         <span class="text-xs font-thin ml-2">9:36 p.m.</span>
       </p>
     </div>
 
     <!-- MENSAJE DE DESTINATARIO -->
-    <div class="flex w-full bg-yellow justify-start">
-      <p class="w-10/12 bg-gray-dark rounded-lg p-2">
+    <div class="flex w-full justify-start ">
+      <p class="w-10/12 bg-gray-dark rounded-lg p-2 shadow-md">
         Esto es un mensaje con contenido , con contenido con contenidocon
         contenido con contenido con contenidocon contenidocon contenido
         <span class="text-xs font-thin ml-2">9:36 p.m.</span>
@@ -31,17 +29,17 @@
     </div>
   </div>
   <!-- INPUT DE ESCRITURA -->
-  <div class="flex h-1/6 mt-10 px-5">
+  <div class="flex h-1/6 pt-7 px-5 bg-white">
     <textarea
       #messageField
-      class="h-11 w-9/12 rounded-lg p-3  resize-none outline-none text-sm"
+      class="h-11 w-9/12 rounded-lg p-3  resize-none outline-none text-sm bg-gray-light shadow-sm"
       (keydown)="enterMessage(messageField, $event)"
     ></textarea>
     <!-- <div class="flex justify-end h-3/6 w-2/12 bg-orange"> -->
       <button
         (click)="sendMessage(messageField)"
         [disabled]="isLoading"
-        class="flex h-11 shadow-md justify-center items-center button-full py-2 w-3/12 ml-3 {{
+        class="flex h-11 shadow-lg justify-center items-center button-full py-2 w-3/12 ml-3 {{
           isLoading ? 'hover:bg-black' : ''
         }}"
       >
