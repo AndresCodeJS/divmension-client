@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { Store } from '../../store/store';
 import { getToken } from '../../user/data-access/local-storage';
-import { ChatCardComponent } from "../chat-card/chat-card.component";
+import { ChatCardComponent } from '../chat-card/chat-card.component';
 
 @Component({
   selector: 'app-chat-frame',
@@ -32,25 +32,41 @@ export class ChatFrameComponent implements OnInit {
   //USADO PARA VALIDAR SI EL USUARIO DEBE RECONECTARSE
   isOnline = false;
 
+  isLoading = false;
+
   webSocket: any;
 
-  @Input() isOpen = false
+  @Input() isOpen = false;
 
-  @Input() chat: string | undefined = ''
+  @Input() chat: string | undefined = '';
 
   constructor(private renderer: Renderer2, private el: ElementRef) {
-     // Listener global para clicks fuera del componente
-     this.renderer.listen('document', 'click', (event: Event) => {
+    // Listener global para clicks fuera del componente
+    this.renderer.listen('document', 'click', (event: Event) => {
       this.onDocumentClick(event);
     });
+  }
+
+  sendMessage(messageField: HTMLTextAreaElement) {
+    console.log(messageField.value);
+    messageField.value = '';
+    
+    
+  }
+
+  enterMessage(messageField: HTMLTextAreaElement, event : KeyboardEvent){
+    if(event.key == 'Enter'){
+      event.preventDefault();
+      this.sendMessage(messageField)
+    }
   }
 
   onDocumentClick(event: Event) {
     const clickedInside = this.el.nativeElement.contains(event.target);
     if (!clickedInside && this.isOpen) {
       //Detecta si se hizo click fuera del componente
-      console.log('click fuera del componente')
-      this.store.closeChat()
+      console.log('click fuera del componente');
+      this.store.closeChat();
     }
   }
 
@@ -62,14 +78,13 @@ export class ChatFrameComponent implements OnInit {
     const atBottom =
       element.scrollHeight - element.scrollTop < element.clientHeight + 500;
 
-      console.log('scrollHeitght', element.scrollHeight)
+    console.log('scrollHeitght', element.scrollHeight);
 
-      console.log('scrollTop',element.scrollTop)
+    console.log('scrollTop', element.scrollTop);
 
-      console.log('clientHeitght',element.clientHeight)
+    console.log('clientHeitght', element.clientHeight);
 
-      console.log(atBottom)
-
+    console.log(atBottom);
   }
 
   ngOnInit(): void {

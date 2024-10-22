@@ -1,4 +1,4 @@
-<div class="fixed flex flex-col rounded-xl modal-chat bg-gray-light py-5">
+<div class="fixed flex flex-col rounded-xl modal-chat bg-gray-light pt-5">
   <!--  <div
     class="hidden lg:flex lg:flex-col lg:justify-between bg-gray-light w-5/12 h-full rounded-l-3xl lg:p-11"
   ></div> -->
@@ -10,33 +10,45 @@
   </div>
   <!-- VENTANA DE MENSAJES -->
   <div
-    class="flex flex-col w-full h-4/6 rounded-xl overflow-y-auto bg-orange px-5"
+    class="flex flex-col w-full h-4/6 overflow-y-auto bg-orange px-5"
     (scroll)="onScroll($event)"
   >
-  <!-- MENSAJE DE REMITENTE -->
-  <div class="flex w-full bg-yellow justify-end mb-2 ">
-    <p class=" bg-gray-light rounded-lg p-2 px-4 ml-20">Esto   
-      <span class="text-xs font-thin ml-2">9:36 p.m.</span>
-    </p>
-  </div>
+    <!-- MENSAJE DE REMITENTE -->
+    <div class="flex w-full bg-yellow justify-end mb-2">
+      <p class="bg-gray-light rounded-lg p-2 px-4 ml-20">
+        Esto
+        <span class="text-xs font-thin ml-2">9:36 p.m.</span>
+      </p>
+    </div>
 
-  <!-- MENSAJE DE DESTINATARIO -->
-  <div class="flex w-full bg-yellow justify-start">
-    <p class="w-10/12 bg-gray-dark rounded-lg p-2">Esto es un mensaje con contenido , con contenido con contenidocon contenido
-      con contenido con contenidocon contenidocon contenido 
-      <span class="text-xs font-thin ml-2">9:36 p.m.</span>
-    </p>
-  </div>
-
-
+    <!-- MENSAJE DE DESTINATARIO -->
+    <div class="flex w-full bg-yellow justify-start">
+      <p class="w-10/12 bg-gray-dark rounded-lg p-2">
+        Esto es un mensaje con contenido , con contenido con contenidocon
+        contenido con contenido con contenidocon contenidocon contenido
+        <span class="text-xs font-thin ml-2">9:36 p.m.</span>
+      </p>
+    </div>
   </div>
   <!-- INPUT DE ESCRITURA -->
-   <div class="h-1/6 mt-2 px-5">
-
-     <textarea class="h-4/6 w-full rounded-lg "></textarea>
-   </div>
-
-   
+  <div class="flex h-1/6 mt-10 px-5">
+    <textarea
+      #messageField
+      class="h-11 w-9/12 rounded-lg p-3  resize-none outline-none text-sm"
+      (keydown)="enterMessage(messageField, $event)"
+    ></textarea>
+    <!-- <div class="flex justify-end h-3/6 w-2/12 bg-orange"> -->
+      <button
+        (click)="sendMessage(messageField)"
+        [disabled]="isLoading"
+        class="flex h-11 shadow-md justify-center items-center button-full py-2 w-3/12 ml-3 {{
+          isLoading ? 'hover:bg-black' : ''
+        }}"
+      >
+        Send
+      </button>
+    <!-- </div> -->
+  </div>
 
   }@else{
   <p class="pl-10 text-xl font-bold mb-10">Chats</p>
