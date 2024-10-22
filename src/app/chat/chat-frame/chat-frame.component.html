@@ -10,11 +10,28 @@
   </div>
   <!-- VENTANA DE MENSAJES -->
   <div
-    class="flex flex-col w-full h-4/6 rounded-xl overflow-y-auto bg-orange"
+    class="flex flex-col w-full h-4/6 rounded-xl overflow-y-auto bg-orange px-5"
     (scroll)="onScroll($event)"
-  ></div>
+  >
+  <!-- MENSAJE DE REMITENTE -->
+  <div class="flex w-full bg-yellow justify-end mb-2 ">
+    <p class=" bg-gray-light rounded-lg p-2 px-4 ml-20">Esto   
+      <span class="text-xs font-thin ml-2">9:36 p.m.</span>
+    </p>
+  </div>
+
+  <!-- MENSAJE DE DESTINATARIO -->
+  <div class="flex w-full bg-yellow justify-start">
+    <p class="w-10/12 bg-gray-dark rounded-lg p-2">Esto es un mensaje con contenido , con contenido con contenidocon contenido
+      con contenido con contenidocon contenidocon contenido 
+      <span class="text-xs font-thin ml-2">9:36 p.m.</span>
+    </p>
+  </div>
+
+
+  </div>
   <!-- INPUT DE ESCRITURA -->
-   <div class="h-1/6  mx-5 mt-2">
+   <div class="h-1/6 mt-2 px-5">
 
      <textarea class="h-4/6 w-full rounded-lg "></textarea>
    </div>
