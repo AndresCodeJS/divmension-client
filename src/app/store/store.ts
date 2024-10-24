@@ -32,6 +32,10 @@ const initialState: IState = {
   chat: {
     isOpen: false,
     to: 'none',
+    photoUrl: '',
+    newSortKey: '',
+    oldSortKey: '',
+    chatId: '',
   },
 };
 
@@ -63,23 +67,35 @@ export const Store = signalStore(
       hideFloatingButton(value: boolean) {
         patchState(store, { hideButton: value });
       },
-      openChat(username?: string) {
-        console.log('recibe instruccion en el storage, ', username)
+      openChat(username?: string, photoUrl?: string) {
+        console.log('recibe instruccion en el storage, ', username);
+
+        //TODO
+        // Buscar en la base de datos si existe el chat PK FROM#TO SK 'CHAT'
+        // Si no existe devolver ID de chat = ULID y SortKey = ULID
         patchState(store, {
           chat: {
             isOpen: true,
             to: username || '',
+            photoUrl: photoUrl || '',
+            newSortKey: '',
+            oldSortKey: '',
+            chatId: '',
           },
         });
       },
-      closeChat(){
+      closeChat() {
         patchState(store, {
           chat: {
             isOpen: false,
-            to: ''
+            to: '',
+            photoUrl: '',
+            newSortKey: '',
+            oldSortKey: '',
+            chatId: '',
           },
         });
-      }
+      },
       /*  resetRefreshInterval(){
 
         clearInterval(intervalId())
