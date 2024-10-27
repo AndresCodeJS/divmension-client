@@ -13,6 +13,7 @@ import { Store } from '../../store/store';
 import { getToken } from '../../user/data-access/local-storage';
 import { ChatCardComponent } from '../chat-card/chat-card.component';
 import { ChatHeaderComponent } from "../chat-header/chat-header.component";
+import { IChat } from '../chat.interface';
 
 @Component({
   selector: 'app-chat-frame',
@@ -39,7 +40,14 @@ export class ChatFrameComponent implements OnInit {
 
   @Input() isOpen = false;
 
-  @Input() chat: string | undefined = '';
+  @Input() chat: IChat = {
+    isOpen: false,
+    to: '',
+    photoUrl: '',
+    newSortKey: '',
+    oldSortKey: '',
+    chatId: ''
+  };
 
   constructor(private renderer: Renderer2, private el: ElementRef) {
     // Listener global para clicks fuera del componente
@@ -62,13 +70,24 @@ export class ChatFrameComponent implements OnInit {
     }
   }
 
+  @Output() closeChatEventEmitter = new EventEmitter<string>();
+
   onDocumentClick(event: Event) {
     const clickedInside = this.el.nativeElement.contains(event.target);
     if (!clickedInside && this.isOpen) {
       //Detecta si se hizo click fuera del componente
       console.log('click fuera del componente');
       this.store.closeChat();
+
+      //USADO PARA BORRAR LOS DATOS DEL CHAT ACTUAL EN DASHBOARD
+      this.closeChatEventEmitter.emit('')
     }
+  }
+
+  //MUESTRA LA LISTA DE CHATS AL PRESIONAR EL BOTON DE BACK EN UN CHT EN APRTICULAR
+  back(){
+    console.log('se ejecuta el back')
+    this.closeChatEventEmitter.emit()
   }
 
   //SE EJECUTA CONSULTA CUANDO SE LLEGA AL PENULTIMO CHAT DE LA LISTA

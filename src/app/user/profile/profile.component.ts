@@ -51,7 +51,7 @@ export default class ProfileComponent implements OnInit {
 
   //ENVIAR MENSAJE AL USUARIO
   sendMessage(){
-    this.store.openChat(this.user.username)
+    this.store.openChat(this.user.username,this.user.photoUrl)
   }
 
   //Carga nuevos posts cuando se hace scroll hasta la penultima fila

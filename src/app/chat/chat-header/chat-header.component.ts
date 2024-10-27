@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { IChat } from '../chat.interface';
 
 @Component({
   selector: 'app-chat-header',
@@ -9,10 +10,18 @@ import { Component, Input } from '@angular/core';
 })
 export class ChatHeaderComponent {
 
-  @Input() item:any = {
-    user: 'Andres',
-    imageUrl:'',
-    status: 'Online'
+  @Input() chat:IChat = {
+    isOpen: false,
+    to: '',
+    photoUrl: '',
+    newSortKey: '',
+    oldSortKey: '',
+    chatId: '',
   }
 
+  @Output() backEventEmitter = new EventEmitter<boolean>();
+
+  back(){
+    this.backEventEmitter.emit(true)
+  }
 }
