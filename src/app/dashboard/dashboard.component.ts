@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ChatFrameComponent } from "../chat/chat-frame/chat-frame.component";
 import { Store } from '../store/store';
+import { IChat } from '../chat/chat.interface';
+import { ChatService } from '../chat/data-access/chat.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,11 +17,22 @@ import { Store } from '../store/store';
 export default class DashboardComponent{
 
   store = inject(Store)
+  chatService = inject(ChatService)
+  
   private destroyEffect: (() => void) | null = null;
 
  chatOpened = false
 
  chat:string | undefined = ''
+
+  currentChat: IChat = {
+    isOpen: false,
+    to: '',
+    photoUrl: '',
+    newSortKey: '',
+    oldSortKey: '',
+    chatId: ''
+  }
 
   constructor(){
     effect(() => {
@@ -30,6 +43,27 @@ export default class DashboardComponent{
       
       this.chatOpened = chat.isOpen
       this.chat = chat.to
+
+      if(chat.to){
+
+        console.log('se ejecuta busqueda del chat con, ',chat.to )
+
+        this.chatService.getChat(chat.to).subscribe({
+          next: (response) =>{
+            console.log('respuesta del chat',response)
+            this.currentChat.isOpen = true
+            this.currentChat.to = chat.to
+            this.currentChat.photoUrl = chat.photoUrl
+            this.currentChat.oldSortKey = response.chat.oldSortKey
+            this.currentChat.chatId = response.chat.chatId
+            this.currentChat.messages = response.chat.messages
+          },
+          error: (error)=>{
+            console.log('error: ', error)
+          }
+        }) 
+
+      }
       
       /* console.log('Chat state:', this.store.chat()); */
       

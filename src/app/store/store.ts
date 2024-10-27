@@ -10,6 +10,7 @@ import { inject, Injectable } from '@angular/core';
 import { getToken, removeToken } from '../user/data-access/local-storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IChat } from '../chat/chat.interface';
+import { ChatService } from '../chat/data-access/chat.service';
 
 export interface IState {
   user: IUserStore;
@@ -31,13 +32,15 @@ const initialState: IState = {
   intervalId: '',
   chat: {
     isOpen: false,
-    to: 'none',
+    to: '',
     photoUrl: '',
     newSortKey: '',
     oldSortKey: '',
     chatId: '',
   },
 };
+
+/* const chatService = new ChatService() */
 
 export const Store = signalStore(
   { providedIn: 'root' },
@@ -68,10 +71,24 @@ export const Store = signalStore(
         patchState(store, { hideButton: value });
       },
       openChat(username?: string, photoUrl?: string) {
+
+        /* const chatService = inject(ChatService) */
+
         console.log('recibe instruccion en el storage, ', username);
 
         //TODO
         // Buscar en la base de datos si existe el chat PK FROM#TO SK 'CHAT'
+        if(username){
+
+        /*   chatService.getChat(username).subscribe({
+            next: (response) =>{
+              console.log('respuesta',response)
+            },
+            error: (error)=>{
+              console.log('error: ', error)
+            }
+          }) */
+        }
         // Si no existe devolver ID de chat = ULID y SortKey = ULID
         patchState(store, {
           chat: {
@@ -133,20 +150,6 @@ export const Store = signalStore(
             next: (user) => {
               store.setUser(user);
               store.setLoading(false);
-
-              //TODO
-              //Conecta websocket
-              /*   console.log('Arranca el socket con ,', user.username);
-              let contador = 0
-              let intervalId = setInterval(() => {
-                console.log('refrescando la conexion,')
-              },1000)
-
-              store.setRefreshInterval(intervalId) */
-
-              /*  setTimeout (()=> {
-                clearInterval(timeoutId)
-              }, 10000) */
             },
             error: (err) => {
               console.log(err);

@@ -24,7 +24,7 @@ export class ChatService extends BaseHttpService {
       'Content-Type': 'application/json',
     });
 
-    return this.http.get<any>(`${this.apiUrl}/chat/${addressee}`, { headers });
+    return this.http.get<any>(`${this.apiUrl}/chat/details/${addressee}`, { headers });
   }
 
  
