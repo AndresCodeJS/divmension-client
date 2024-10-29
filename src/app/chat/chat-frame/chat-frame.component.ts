@@ -12,8 +12,9 @@ import {
 import { Store } from '../../store/store';
 import { getToken } from '../../user/data-access/local-storage';
 import { ChatCardComponent } from '../chat-card/chat-card.component';
-import { ChatHeaderComponent } from "../chat-header/chat-header.component";
+import { ChatHeaderComponent } from '../chat-header/chat-header.component';
 import { IChat } from '../chat.interface';
+import { ulid } from 'ulid';
 
 @Component({
   selector: 'app-chat-frame',
@@ -46,7 +47,8 @@ export class ChatFrameComponent implements OnInit {
     photoUrl: '',
     newSortKey: '',
     oldSortKey: '',
-    chatId: ''
+    chatId: '',
+    messages: [],
   };
 
   constructor(private renderer: Renderer2, private el: ElementRef) {
@@ -58,15 +60,41 @@ export class ChatFrameComponent implements OnInit {
 
   sendMessage(messageField: HTMLTextAreaElement) {
     console.log(messageField.value);
+
+    //SI EL CHAT ES NUEVO SE GENERA UN ID
+    let chatId = this.chat.chatId || ulid()
+
+    let data = {
+      newSortKey: ulid(),
+      oldSortKey: this.chat.oldSortKey,
+      token: getToken(),
+      to: this.chat.to,
+      id: chatId,
+      message: messageField.value,
+    };
+
+    const body = {
+      action: 'SEND_MESSAGE',
+      data,
+    };
+
+    console.log('se enviará: ', body)
+
+    this.webSocket.send(JSON.stringify(body));
+
     messageField.value = '';
-    
-    
   }
 
-  enterMessage(messageField: HTMLTextAreaElement, event : KeyboardEvent){
-    if(event.key == 'Enter'){
+  ReceiveMessage(){
+    this.webSocket.onmessage = (event: any) =>{
+      console.log('recibiendo mensaje: ', event.data)
+    }
+  }
+
+  enterMessage(messageField: HTMLTextAreaElement, event: KeyboardEvent) {
+    if (event.key == 'Enter') {
       event.preventDefault();
-      this.sendMessage(messageField)
+      this.sendMessage(messageField);
     }
   }
 
@@ -80,14 +108,14 @@ export class ChatFrameComponent implements OnInit {
       this.store.closeChat();
 
       //USADO PARA BORRAR LOS DATOS DEL CHAT ACTUAL EN DASHBOARD
-      this.closeChatEventEmitter.emit('')
+      this.closeChatEventEmitter.emit('');
     }
   }
 
   //MUESTRA LA LISTA DE CHATS AL PRESIONAR EL BOTON DE BACK EN UN CHT EN APRTICULAR
-  back(){
-    console.log('se ejecuta el back')
-    this.closeChatEventEmitter.emit()
+  back() {
+    console.log('se ejecuta el back');
+    this.closeChatEventEmitter.emit();
   }
 
   //SE EJECUTA CONSULTA CUANDO SE LLEGA AL PENULTIMO CHAT DE LA LISTA
@@ -146,7 +174,7 @@ export class ChatFrameComponent implements OnInit {
       console.log('refrescando la conexion,', new Date(timestamp));
       this.webSocket?.send(
         JSON.stringify({
-          action: 'SEND_MESSAGE',
+          action: 'PING',
           data: {
             message: 'Ping de Actualizacion',
           },
@@ -167,6 +195,10 @@ export class ChatFrameComponent implements OnInit {
     }, 1000 * 60 * 110);
 
     this.isOnline = true;
+
+    //FUNCION EJECUTADA CUANDO SE RECIBE UN MENSAJE
+    this.ReceiveMessage()
+
   }
 
   async disconnect() {
