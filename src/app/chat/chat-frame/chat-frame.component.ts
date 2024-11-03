@@ -71,6 +71,7 @@ export class ChatFrameComponent implements OnInit {
       to: this.chat.to,
       id: chatId,
       message: messageField.value,
+      photoUrl: this.store.user().photoUrl,
     };
 
     const body = {
@@ -83,11 +84,31 @@ export class ChatFrameComponent implements OnInit {
     this.webSocket.send(JSON.stringify(body));
 
     messageField.value = '';
+
+    if(!this.chat.oldSortKey){ // CUANDO ES PRIMERA VEZ QUE SE ENVIA UN MSJ
+      this.chat.oldSortKey = data.newSortKey
+    }
   }
 
   ReceiveMessage(){
     this.webSocket.onmessage = (event: any) =>{
-      console.log('recibiendo mensaje: ', event.data)
+      console.log('recibiendo mensaje: ', JSON.parse(event.data))
+
+      let response = JSON.parse(event.data)
+
+      let sender = response.sender
+
+      console.log('hablando con ', this.chat.to)
+      console.log('recibiendo de', sender )
+
+      if(this.chat.isOpen && this.chat.to == sender ){//CUANDO ES PRIMERA VEZ QUE SE RECIBE UN MENSAJE
+        this.chat.oldSortKey = response.info.newSortKey
+        this.chat.chatId = response.info.id
+
+        //TODO
+
+        //RELLENAR LAS DEMAS PROPIEDADES
+      }
     }
   }
 
