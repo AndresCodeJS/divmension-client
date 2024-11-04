@@ -66,7 +66,7 @@ export default class DashboardComponent {
             console.log('respuesta del chat', response);
             this.currentChat.oldSortKey = response.chat.oldSortKey;
             this.currentChat.chatId = response.chat.chatId;
-            this.currentChat.messages = response.chat.messages;
+            this.currentChat.messages = response.chat.messages.reverse();
           },
           error: (error) => {
             console.log('error: ', error);
