@@ -157,9 +157,13 @@ export class ChatFrameComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //INICIA LA CONEXION DEL WEBSOCKET
     if (getToken()) {
       this.connect();
     }
+
+    //OBTIENE LOS PRIMEROS 10 CHATS PERTENECIENTES AL USUARIO LOGUEADO
+
 
     //FUNCIONES EJECUTADAS CUANDO SE INTERACTUA CON EL SOCKET
     /*  this.socket.on('connect', () => {

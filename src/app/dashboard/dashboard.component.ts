@@ -40,6 +40,7 @@ export default class DashboardComponent {
     newSortKey: '',
     oldSortKey: '',
     chatId: '',
+    messages: []
   };
 
   constructor() {
